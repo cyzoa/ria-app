@@ -1,17 +1,29 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { createProject } from "@/lib/actions/projects";
 
 export function CreateProjectForm() {
   const [open, setOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const submittingRef = useRef(false);
 
   function handleSubmit(formData: FormData) {
+    if (submittingRef.current) return;
+    submittingRef.current = true;
+    setError(null);
+
     startTransition(async () => {
-      const result = await createProject(formData);
-      if (!result.error) {
+      try {
+        const result = await createProject(formData);
+        if (result.error) {
+          setError(result.error);
+          return;
+        }
         setOpen(false);
+      } finally {
+        submittingRef.current = false;
       }
     });
   }
@@ -19,47 +31,78 @@ export function CreateProjectForm() {
   if (!open) {
     return (
       <button
+        type="button"
         onClick={() => setOpen(true)}
-        className="bg-gold mb-6 w-full rounded-xl py-3 text-[13px] font-medium text-card-white"
+        className="flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-[15px] font-semibold text-white transition-colors hover:bg-primary/90"
       >
-        + 새 프로젝트
+        <span aria-hidden="true" className="text-xl leading-none">
+          +
+        </span>
+        새 Project 만들기
       </button>
     );
   }
 
   return (
-    <form action={handleSubmit} className="border-divider mb-6 space-y-3 rounded-2xl border bg-card-white p-4">
-      <input
-        name="name"
-        required
-        placeholder="프로젝트 이름"
-        className="border-divider w-full rounded-xl border bg-card-white px-3 py-2 text-[16px] outline-none focus:border-gold"
-      />
-
-      <div className="flex gap-2">
+    <form
+      action={handleSubmit}
+      aria-busy={pending}
+      className="space-y-5 rounded-2xl border border-border bg-surface p-4 sm:p-5"
+    >
+      <div>
+        <label htmlFor="project-name" className="mb-2 block text-sm font-medium text-text-primary">
+          Project 이름
+        </label>
         <input
-          name="color"
-          type="color"
-          defaultValue="#C9A661"
-          className="h-10 w-10 rounded-lg border border-divider"
+          id="project-name"
+          name="name"
+          required
+          autoFocus
+          placeholder="함께 묶어둘 일의 이름"
+          className="min-h-12 w-full rounded-xl border border-border bg-surface px-3 py-2 text-base text-text-primary placeholder:text-text-secondary/75"
         />
-        <div className="flex-1">
-          <p className="text-stone text-[13px]">색상 선택</p>
+      </div>
+
+      <div>
+        <label htmlFor="project-color" className="mb-2 block text-sm font-medium text-text-primary">
+          구분 색상
+        </label>
+        <div className="flex min-w-0 items-center gap-3">
+          <input
+            id="project-color"
+            name="color"
+            type="color"
+            defaultValue="#C9A661"
+            className="h-12 w-12 shrink-0 rounded-xl border border-border bg-surface p-1"
+          />
+          <p className="min-w-0 text-sm leading-5 text-text-secondary">
+            이름과 함께 Project를 구분하는 보조 색상이에요.
+          </p>
         </div>
       </div>
 
-      <div className="flex gap-2">
+      {error && (
+        <p role="alert" className="text-sm leading-5 text-danger">
+          {error}
+        </p>
+      )}
+
+      <div className="grid grid-cols-2 gap-3">
         <button
           type="submit"
           disabled={pending}
-          className="bg-gold rounded-lg px-4 py-2 text-[13px] text-card-white disabled:opacity-50"
+          className="min-h-12 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-80"
         >
-          추가
+          {pending ? "추가 중…" : "Project 추가"}
         </button>
         <button
           type="button"
-          onClick={() => setOpen(false)}
-          className="text-stone text-[13px] underline"
+          disabled={pending}
+          onClick={() => {
+            setError(null);
+            setOpen(false);
+          }}
+          className="min-h-12 rounded-xl border border-border bg-surface-muted px-4 py-2 text-sm font-medium text-text-secondary disabled:opacity-80"
         >
           취소
         </button>

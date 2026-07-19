@@ -7,8 +7,15 @@ export default async function SettingsPage() {
   if (!data) redirect("/login");
 
   return (
-    <div className="px-6 pt-12 fade-in">
-      <h1 className="mb-6 text-[28px] font-light tracking-tight">설정</h1>
+    <div className="fade-in px-5 pt-10 sm:px-6 sm:pt-12">
+      <header className="mb-7 max-w-xl">
+        <h1 className="text-[2rem] font-semibold tracking-[-0.035em] text-text-primary">
+          설정
+        </h1>
+        <p className="mt-2 max-w-md text-[15px] leading-6 text-text-secondary">
+          RIA가 어떤 말투로 곁에 있을지 선택하세요.
+        </p>
+      </header>
       <SpeechStyleToggle currentStyle={data.profile?.speech_style ?? null} />
     </div>
   );

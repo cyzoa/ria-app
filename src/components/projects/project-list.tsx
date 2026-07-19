@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useRef, useState, useTransition } from "react";
 import { deleteProject } from "@/lib/actions/projects";
 import type { SpeechStyle } from "@/types/database";
 
@@ -17,59 +17,106 @@ interface Props {
 }
 
 const emptyMessages = {
-  formal: {
-    empty: "아직 만든 프로젝트가 없어요.\n새로운 프로젝트를 시작해볼까요?",
-  },
-  casual: {
-    empty: "아직 만든 프로젝트가 없어.\n새로운 프로젝트를 시작해볼까?",
-  },
+  formal: "아직 만든 Project가 없어요. 필요할 때 새로운 방향을 묶어보세요.",
+  casual: "아직 만든 Project가 없어. 필요할 때 새로운 방향을 묶어봐.",
 };
 
 export function ProjectList({ projects, speechStyle = "formal" }: Props) {
   const [pending, startTransition] = useTransition();
+  const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const mutationRef = useRef(false);
 
   function handleDelete(projectId: string) {
+    if (mutationRef.current) return;
+    mutationRef.current = true;
+    setActiveProjectId(projectId);
+    setError(null);
+
     startTransition(async () => {
-      await deleteProject(projectId);
+      try {
+        const result = await deleteProject(projectId);
+        if (result.error) {
+          setError(result.error);
+          return;
+        }
+        setActiveProjectId(null);
+      } finally {
+        mutationRef.current = false;
+      }
     });
   }
 
   if (projects.length === 0) {
     return (
-      <p className="text-stone whitespace-pre-line text-[16px]">{emptyMessages[speechStyle].empty}</p>
+      <section aria-labelledby="project-list-heading">
+        <h2 id="project-list-heading" className="text-lg font-semibold text-text-primary">
+          현재 Project
+        </h2>
+        <div className="mt-4 rounded-2xl bg-surface-muted px-5 py-6">
+          <p className="text-base leading-7 text-text-secondary">
+            {emptyMessages[speechStyle]}
+          </p>
+        </div>
+      </section>
     );
   }
 
   return (
-    <div className="space-y-3">
-      {projects.map((project) => (
-        <div
-          key={project.id}
-          className="border-divider rounded-2xl border bg-card-white p-4"
-        >
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex-1">
-              <div className="flex items-center gap-2">
-                <div
-                  className="h-3 w-3 rounded-full"
-                  style={{ backgroundColor: project.color }}
-                />
-                <h3 className="text-[16px] font-medium">{project.name}</h3>
-              </div>
-              <p className="text-stone mt-1 text-[13px]">
-                {project.taskCount}개의 Task
-              </p>
-            </div>
-            <button
-              onClick={() => handleDelete(project.id)}
-              disabled={pending}
-              className="text-stone text-[13px] underline disabled:opacity-50"
-            >
-              삭제
-            </button>
-          </div>
+    <section aria-labelledby="project-list-heading">
+      <div className="mb-4 flex items-end justify-between gap-4">
+        <div>
+          <h2 id="project-list-heading" className="text-lg font-semibold text-text-primary">
+            현재 Project
+          </h2>
+          <p className="mt-1 text-sm text-text-secondary">작업이 묶인 방향을 한눈에 살펴보세요.</p>
         </div>
-      ))}
-    </div>
+        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={`${projects.length}개`}>
+          {projects.length}
+        </span>
+      </div>
+
+      <ul className="divide-y divide-border border-y border-border">
+        {projects.map((project) => {
+          const isPending = pending && activeProjectId === project.id;
+
+          return (
+            <li
+              key={project.id}
+              className="flex min-w-0 items-start gap-3 py-5 first:pt-4 last:pb-4"
+              aria-busy={isPending}
+            >
+              <span
+                aria-hidden="true"
+                className="mt-2 h-3 w-3 shrink-0 rounded-full"
+                style={{ backgroundColor: project.color }}
+              />
+              <div className="min-w-0 flex-1">
+                <h3 className="break-words text-base font-semibold leading-6 text-text-primary [overflow-wrap:anywhere]">
+                  {project.name}
+                </h3>
+                <p className="mt-1 text-sm text-text-secondary">
+                  연결된 Task {project.taskCount}개
+                </p>
+                {error && activeProjectId === project.id && (
+                  <p role="alert" className="mt-3 text-sm leading-5 text-danger">
+                    {error}
+                  </p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => handleDelete(project.id)}
+                disabled={pending}
+                aria-label={`${project.name} Project 삭제`}
+                className="min-h-11 shrink-0 rounded-lg px-3 py-2 text-sm font-medium text-danger disabled:opacity-80"
+              >
+                {isPending ? "삭제 중…" : "삭제"}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
   );
 }
