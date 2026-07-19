@@ -32,46 +32,79 @@ export function Top3Section({ tasks, speechStyle = "formal" }: Props) {
   }
 
   return (
-    <section className="mb-12">
-      <h2 className="mb-3 text-[13px] font-medium tracking-wide uppercase text-soft-black">
-        Today&apos;s Top 3
-      </h2>
-      <div className="border-divider rounded-2xl border bg-card-white p-6">
-        {tasks.length === 0 ? (
-          <button
-            onClick={() => router.push("/tasks")}
-            className="w-full text-left"
-          >
-            <p className="text-stone whitespace-pre-line text-[16px]">{emptyMessages[speechStyle].empty}</p>
-          </button>
-        ) : (
-          <ul className={cn("space-y-3", pending && "opacity-60")}>
-            {tasks.map((task) => (
-              <li key={task.id} className="flex items-start gap-3">
+    <section aria-labelledby="top-priorities-title" className="mb-10">
+      <div className="mb-3">
+        <h2 id="top-priorities-title" className="text-sm font-semibold text-text-primary">
+          지금 가능한 한 걸음
+        </h2>
+        <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+          가장 의미 있는 일부터 하나씩 이어가요.
+        </p>
+      </div>
+
+      {tasks.length === 0 ? (
+        <button
+          onClick={() => router.push("/tasks")}
+          className="w-full rounded-2xl bg-surface-muted px-4 py-4 text-left"
+        >
+          <p className="whitespace-pre-line break-words text-base leading-relaxed text-text-secondary">
+            {emptyMessages[speechStyle].empty}
+          </p>
+          <p className="mt-2 text-sm font-medium text-primary">할 일에서 정하기</p>
+        </button>
+      ) : (
+        <ul className={cn("space-y-2", pending && "opacity-60")} aria-busy={pending}>
+          {tasks.map((task, index) => {
+            const isFirst = index === 0;
+
+            return (
+              <li
+                key={task.id}
+                className={cn(
+                  "flex min-w-0 items-start gap-2",
+                  isFirst
+                    ? "rounded-2xl bg-surface px-3 py-4"
+                    : "border-t border-border px-1 py-3"
+                )}
+              >
                 <button
                   onClick={() => handleToggle(task)}
-                  className={cn(
-                    "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-all duration-300",
-                    task.status === "done"
-                      ? "border-gold bg-gold text-card-white"
-                      : "border-divider"
-                  )}
+                  disabled={pending}
+                  aria-label={`${task.title} ${task.status === "done" ? "미완료로 변경" : "완료"}`}
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full disabled:opacity-50"
                 >
-                  {task.status === "done" && "✓"}
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "flex h-5 w-5 items-center justify-center rounded-full border text-xs",
+                      task.status === "done"
+                        ? "border-balance bg-balance text-white"
+                        : "border-text-secondary"
+                    )}
+                  >
+                    {task.status === "done" && "✓"}
+                  </span>
                 </button>
-                <span
-                  className={cn(
-                    "text-[16px] transition-all duration-300",
-                    task.status === "done" && "text-stone line-through"
+
+                <div className="min-w-0 flex-1 pt-2">
+                  {isFirst && (
+                    <p className="mb-1 text-xs font-semibold text-primary">먼저</p>
                   )}
-                >
-                  {task.title}
-                </span>
+                  <p
+                    className={cn(
+                      "break-words leading-relaxed text-text-primary [overflow-wrap:anywhere]",
+                      isFirst ? "text-[18px] font-medium" : "text-base",
+                      task.status === "done" && "text-text-secondary line-through"
+                    )}
+                  >
+                    {task.title}
+                  </p>
+                </div>
               </li>
-            ))}
-          </ul>
-        )}
-      </div>
+            );
+          })}
+        </ul>
+      )}
     </section>
   );
 }

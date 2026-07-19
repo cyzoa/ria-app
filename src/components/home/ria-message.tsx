@@ -6,13 +6,18 @@ interface Props {
 
 export function RiaMessage({ message = "오늘은 오후 일정이 조금 무거워 보여요. 오전에는 중요한 것 하나만 먼저 끝내볼까요?" }: Props) {
   return (
-    <div className="border-divider mb-8 rounded-2xl border bg-card-white p-6 fade-in">
+    <aside aria-label="RIA의 제안" className="fade-in mb-8 border-l-2 border-balance bg-balance/5 px-4 py-3">
       <div className="flex items-start gap-3">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gold/10">
-          <span className="text-gold text-[16px]">RIA</span>
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-balance/10">
+          <span className="text-sm font-semibold text-balance">RIA</span>
         </div>
-        <p className="text-[16px] leading-relaxed">{message}</p>
+        <div className="min-w-0 pt-1">
+          <p className="text-xs font-semibold text-balance">함께 살펴볼까요?</p>
+          <p className="mt-1 break-words text-[15px] leading-relaxed text-text-primary [overflow-wrap:anywhere]">
+            {message}
+          </p>
+        </div>
       </div>
-    </div>
+    </aside>
   );
 }

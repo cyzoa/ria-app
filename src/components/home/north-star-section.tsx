@@ -36,26 +36,32 @@ export function NorthStarSection({ northStar, speechStyle = "formal" }: Props) {
   }
 
   return (
-    <section className="mb-12">
-      <h2 className="text-gold mb-3 flex items-center gap-1.5 text-[13px] font-medium tracking-wide uppercase">
-        Today&apos;s North Star <span>⭐</span>
-      </h2>
-      <div className="border-divider rounded-2xl border bg-card-white p-6">
+    <section aria-labelledby="north-star-title" className="mb-10">
+      <div className="mb-3">
+        <h2 id="north-star-title" className="text-sm font-semibold text-text-primary">
+          오늘의 방향
+        </h2>
+        <p className="mt-1 text-sm leading-relaxed text-text-secondary">
+          오늘을 이끌 한 가지를 천천히 정해보세요.
+        </p>
+      </div>
+      <div className="rounded-[20px] bg-primary-soft p-5 sm:p-6">
         {editing ? (
-          <div className="space-y-3">
+          <div className="space-y-4">
             <input
+              aria-label="오늘의 방향"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder={messages.placeholder}
-              className="border-divider w-full rounded-xl border bg-card-white px-3 py-2 text-[16px] outline-none focus:border-gold"
+              className="w-full rounded-xl border border-border bg-surface px-4 py-3 text-base text-text-primary outline-none placeholder:text-text-secondary focus:border-primary"
             />
-            <div className="flex gap-2">
+            <div className="flex flex-wrap gap-2">
               <button
                 onClick={handleSave}
                 disabled={pending}
-                className="bg-gold rounded-lg px-4 py-1.5 text-[13px] text-card-white"
+                className="rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-white disabled:opacity-50"
               >
-                저장
+                {pending ? "저장 중" : "저장"}
               </button>
               {northStar && (
                 <button
@@ -63,7 +69,7 @@ export function NorthStarSection({ northStar, speechStyle = "formal" }: Props) {
                     setTitle(northStar.title);
                     setEditing(false);
                   }}
-                  className="text-stone text-[13px] underline"
+                  className="rounded-xl px-4 py-2 text-sm font-medium text-text-secondary underline decoration-border underline-offset-4"
                 >
                   취소
                 </button>
@@ -71,14 +77,22 @@ export function NorthStarSection({ northStar, speechStyle = "formal" }: Props) {
             </div>
           </div>
         ) : northStar ? (
-          <button onClick={() => setEditing(true)} className="w-full text-left">
-            <p className="text-[16px]">{northStar.title}</p>
-            <p className="text-stone mt-1 text-[13px]">탭해서 수정</p>
+          <button
+            onClick={() => setEditing(true)}
+            className="w-full rounded-xl text-left"
+            aria-label={`오늘의 방향 수정: ${northStar.title}`}
+          >
+            <p className="break-words text-[21px] font-medium leading-relaxed tracking-[-0.02em] text-text-primary [overflow-wrap:anywhere]">
+              {northStar.title}
+            </p>
+            <p className="mt-2 text-sm text-text-secondary">눌러서 다시 살펴보기</p>
           </button>
         ) : (
-          <button onClick={() => setEditing(true)} className="w-full text-left">
-            <p className="text-stone whitespace-pre-line text-[16px]">{messages.empty}</p>
-            <p className="text-stone mt-2 text-[13px]">탭해서 작성</p>
+          <button onClick={() => setEditing(true)} className="w-full rounded-xl text-left">
+            <p className="whitespace-pre-line break-words text-base leading-relaxed text-text-secondary">
+              {messages.empty}
+            </p>
+            <p className="mt-2 text-sm font-medium text-primary">눌러서 방향 정하기</p>
           </button>
         )}
       </div>
