@@ -74,6 +74,43 @@
   filter: brightness(0.94);
 }
 
+:root {
+  --app-bottom-nav-height: 5.5rem;
+}
+
+.app-shell-header {
+  padding-top: max(3rem, calc(env(safe-area-inset-top) + 1.5rem));
+}
+
+.app-shell-content {
+  padding-bottom: calc(var(--app-bottom-nav-height) + env(safe-area-inset-bottom));
+}
+
+.app-bottom-nav {
+  display: flex;
+  min-height: calc(var(--app-bottom-nav-height) + env(safe-area-inset-bottom));
+  flex-direction: column;
+  padding-bottom: env(safe-area-inset-bottom);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.app-bottom-nav-inner {
+  min-height: var(--app-bottom-nav-height);
+  flex: 1;
+}
+
+@supports selector(:has(*)) {
+  @media (pointer: coarse) and (max-height: 32rem) {
+    body:has(:is(input, textarea, select):focus) .app-bottom-nav {
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(100%);
+    }
+  }
+}
+
 @layer utilities {
   .fade-in {
     animation: fadeIn 200ms ease-in-out;

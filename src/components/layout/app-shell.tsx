@@ -11,9 +11,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <main className={`mx-auto min-h-dvh max-w-lg ${hideNav ? "" : "pb-20"}`}>
+      <main
+        className={`mx-auto min-h-dvh max-w-lg ${hideNav ? "" : "app-shell-content"}`}
+      >
         {!hideNav && (
-          <div className="px-6 pt-12 flex justify-between items-center">
+          <div className="app-shell-header flex items-center justify-between px-5 sm:px-6">
             <LogoutButton />
             <VoiceCta />
           </div>
