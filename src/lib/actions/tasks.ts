@@ -34,7 +34,7 @@ export async function createTask(formData: FormData) {
 
   if (error) return { error: "잠깐 문제가 생겼나 봐. 다시 한번 해볼까?" };
 
-  revalidatePath("/");
+  revalidatePath("/home");
   revalidatePath("/tasks");
   return { success: true };
 }
@@ -54,7 +54,7 @@ export async function updateTaskStatus(taskId: string, status: TaskStatus) {
 
   if (error) return { error: "잠깐 문제가 생겼나 봐. 다시 한번 해볼까?" };
 
-  revalidatePath("/");
+  revalidatePath("/home");
   revalidatePath("/tasks");
   return { success: true };
 }
@@ -79,7 +79,7 @@ export async function deleteTask(taskId: string) {
 
   if (error) return { error: "잠깐 문제가 생겼나 봐. 다시 한번 해볼까?" };
 
-  revalidatePath("/");
+  revalidatePath("/home");
   revalidatePath("/tasks");
   return { success: true };
 }
@@ -109,7 +109,7 @@ export async function setTaskTop3(taskId: string, isTop3: boolean) {
 
   if (error) return { error: "잠깐 문제가 생겼나 봐. 다시 한번 해볼까?" };
 
-  revalidatePath("/");
+  revalidatePath("/home");
   revalidatePath("/tasks");
   return { success: true };
 }

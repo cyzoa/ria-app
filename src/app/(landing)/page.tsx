@@ -8,7 +8,7 @@ export default function LandingPage() {
 
   useEffect(() => {
     const video = document.createElement("video");
-    video.src = "/RIA_20260709_VIDEO.MP4";
+    video.src = "/RIA_20260709_VIDEO.mp4";
     video.preload = "auto";
     video.oncanplaythrough = () => setVideoReady(true);
     video.onerror = () => setVideoReady(false);
@@ -38,7 +38,7 @@ export default function LandingPage() {
               onLoadedData={() => setVideoReady(true)}
               className={`h-full w-full object-cover transition-opacity duration-500 ${videoReady ? "opacity-100" : "opacity-0"}`}
             >
-              <source src="/RIA_20260709_VIDEO.MP4" type="video/mp4" />
+              <source src="/RIA_20260709_VIDEO.mp4" type="video/mp4" />
             </video>
           </div>
           <h1 className="mb-4 text-[56px] font-light leading-tight tracking-tight text-soft-black">

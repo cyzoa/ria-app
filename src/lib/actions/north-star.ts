@@ -28,6 +28,6 @@ export async function saveNorthStar(title: string) {
 
   if (error) return { error: error.message };
 
-  revalidatePath("/");
+  revalidatePath("/home");
   return { success: true };
 }

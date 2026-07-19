@@ -2,9 +2,13 @@ import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
 const publicPaths = ["/", "/login", "/auth/callback"];
+const publicAssetPaths = new Set(["/RIA_20260709_VIDEO.mp4"]);
 
 function isPublicPath(pathname: string) {
-  return publicPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+  return (
+    publicAssetPaths.has(pathname) ||
+    publicPaths.some((path) => pathname === path || pathname.startsWith(`${path}/`))
+  );
 }
 
 export async function updateSession(request: NextRequest) {

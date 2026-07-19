@@ -4,6 +4,8 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { getAuthErrorMessage } from "@/lib/auth-error-messages";
 
+const googleAuthEnabled = process.env.NEXT_PUBLIC_ENABLE_GOOGLE_AUTH === "true";
+
 export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -78,28 +80,32 @@ export function LoginForm() {
 
   return (
     <div className="space-y-4">
-      <div className="space-y-3">
-        <button
-          onClick={handleGoogleSignIn}
-          disabled={loading}
-          className="border-divider w-full rounded-xl border bg-card-white py-3 text-[16px] font-medium transition-opacity hover:opacity-90 disabled:opacity-50"
-        >
-          Google로 로그인
-        </button>
-        <button
-          onClick={handleGoogleSignUp}
-          disabled={loading}
-          className="border-divider w-full rounded-xl border bg-card-white py-3 text-[16px] font-medium transition-opacity hover:opacity-90 disabled:opacity-50"
-        >
-          Google로 회원가입
-        </button>
-      </div>
+      {googleAuthEnabled && (
+        <>
+          <div className="space-y-3">
+            <button
+              onClick={handleGoogleSignIn}
+              disabled={loading}
+              className="border-divider w-full rounded-xl border bg-card-white py-3 text-[16px] font-medium transition-opacity hover:opacity-90 disabled:opacity-50"
+            >
+              Google로 로그인
+            </button>
+            <button
+              onClick={handleGoogleSignUp}
+              disabled={loading}
+              className="border-divider w-full rounded-xl border bg-card-white py-3 text-[16px] font-medium transition-opacity hover:opacity-90 disabled:opacity-50"
+            >
+              Google로 회원가입
+            </button>
+          </div>
 
-      <div className="flex items-center gap-2">
-        <div className="flex-1 border-t border-divider" />
-        <span className="text-stone text-[13px]">또는</span>
-        <div className="flex-1 border-t border-divider" />
-      </div>
+          <div className="flex items-center gap-2">
+            <div className="flex-1 border-t border-divider" />
+            <span className="text-stone text-[13px]">또는</span>
+            <div className="flex-1 border-t border-divider" />
+          </div>
+        </>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
       <div>
