@@ -1,0 +1,39 @@
+@import "tailwindcss";
+
+@theme {
+  --color-warm-white: #FAF7F2;
+  --color-card-white: #FFFFFF;
+  --color-soft-black: #2A2724;
+  --color-stone: #8C8579;
+  --color-gold: #C9A661;
+  --color-divider: #E8E2D8;
+
+  --font-sans: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  --font-display: "Fraunces", "Source Serif 4", serif;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-warm-white text-soft-black font-sans;
+  }
+}
+
+@layer utilities {
+  .fade-in {
+    animation: fadeIn 200ms ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
