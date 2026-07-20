@@ -1,13 +1,13 @@
 "use client";
 
-import { getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
 
 interface Props {
   rhythmType?: "Calm" | "Focus" | "Recovery" | "Light" | "Deep Work";
 }
 
 export function TodayRhythmCard({ rhythmType = "Calm" }: Props) {
-  const copy = getDictionary().home.rhythm;
+  const copy = useDictionary().home.rhythm;
 
   return (
     <div className="border-divider mb-8 rounded-2xl border bg-card-white p-6 fade-in">

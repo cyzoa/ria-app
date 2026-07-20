@@ -1,21 +1,26 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getHomeData } from "@/lib/queries/home";
-import { getGreeting, formatDate } from "@/lib/utils";
+import { getGreetingTemplate, formatDate } from "@/lib/formatting";
 import { NorthStarSection } from "@/components/home/north-star-section";
 import { Top3Section } from "@/components/home/top3-section";
 import { ScheduleSection } from "@/components/home/schedule-section";
 import { RiaMessage } from "@/components/home/ria-message";
-import { getDictionary } from "@/locales";
+import { getRequestDictionary, getRequestLocale } from "@/lib/locale";
 
 export default async function HomePage() {
-  const data = await getHomeData();
+  const [data, copy, locale] = await Promise.all([
+    getHomeData(),
+    getRequestDictionary(),
+    getRequestLocale(),
+  ]);
   if (!data) redirect("/login");
 
   const speechStyle = data.profile?.speech_style ?? "formal";
-  const copy = getDictionary();
-  const greeting = getGreeting(speechStyle);
+  const timeZone = data.profile?.timezone ?? "Asia/Seoul";
   const name = data.profile?.preferred_name ?? (speechStyle === "casual" ? copy.home.casualDefaultName : "");
+  const greetingTemplate = getGreetingTemplate(speechStyle, locale, Boolean(name));
+  const [greetingBeforeName, greetingAfterName = ""] = greetingTemplate.split("{name}");
 
   // RIA 메시지 조건부 로직
   const hasSchedule = data.scheduleTasks.length > 0;
@@ -30,17 +35,17 @@ export default async function HomePage() {
   return (
     <div className="fade-in px-5 pb-10 sm:px-6">
       <header className="mb-10">
-        <p className="text-sm text-text-secondary">{formatDate()}</p>
+        <p className="text-sm text-text-secondary">{formatDate(new Date(), locale, timeZone)}</p>
         <h1 className="mt-2 max-w-md text-[26px] font-light leading-snug tracking-[-0.02em] text-text-primary">
-          {greeting}
-          {name && <span className="font-normal text-accent">, {name}</span>}
-          {!name && <span className="text-accent">.</span>}
+          {greetingBeforeName}
+          {name && <span className="font-normal text-accent">{name}</span>}
+          {greetingAfterName}
         </h1>
       </header>
 
       <NorthStarSection northStar={data.northStar} speechStyle={speechStyle} />
       <Top3Section tasks={data.top3Tasks} speechStyle={speechStyle} />
-      <ScheduleSection tasks={data.scheduleTasks} speechStyle={speechStyle} />
+      <ScheduleSection tasks={data.scheduleTasks} speechStyle={speechStyle} timeZone={timeZone} />
 
       <section aria-labelledby="quick-capture-title" className="mb-10">
         <h2 id="quick-capture-title" className="mb-3 text-sm font-semibold text-text-primary">

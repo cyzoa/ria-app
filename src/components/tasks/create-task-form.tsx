@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { createTask } from "@/lib/actions/tasks";
-import { getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
 import type { Project } from "@/types/database";
 
 interface Props {
@@ -14,7 +14,7 @@ export function CreateTaskForm({ projects }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const submittingRef = useRef(false);
-  const dictionary = getDictionary();
+  const dictionary = useDictionary();
   const copy = dictionary.tasks.create;
 
   function handleSubmit(formData: FormData) {

@@ -4,7 +4,8 @@ import { useMemo, useState } from "react";
 import { CreateTaskForm } from "./create-task-form";
 import { TaskItem } from "./task-item";
 import type { Project, Task, TaskStatus } from "@/types/database";
-import { formatMessage, getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
+import { formatCountMessage } from "@/locales/types";
 
 interface Props {
   tasks: Task[];
@@ -14,7 +15,7 @@ interface Props {
 export function TaskList({ tasks, projects }: Props) {
   const [statusFilter, setStatusFilter] = useState<TaskStatus | "all">("all");
   const [projectFilter, setProjectFilter] = useState<string>("all");
-  const dictionary = getDictionary();
+  const dictionary = useDictionary();
   const copy = dictionary.tasks;
 
   const filtered = useMemo(() => {
@@ -147,6 +148,7 @@ function TaskSection({
   quiet = false,
 }: TaskSectionProps) {
   const sectionId = `task-section-${title.replaceAll(" ", "-")}`;
+  const dictionary = useDictionary();
 
   return (
     <section aria-labelledby={sectionId} className={quiet ? "opacity-80" : undefined}>
@@ -164,7 +166,7 @@ function TaskSection({
           </h2>
           <p className="mt-1 text-sm leading-5 text-text-secondary">{description}</p>
         </div>
-        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={formatMessage(getDictionary().accessibility.itemCount, { count: tasks.length })}>
+        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={formatCountMessage(dictionary.accessibility.itemCount, tasks.length)}>
           {tasks.length}
         </span>
       </div>

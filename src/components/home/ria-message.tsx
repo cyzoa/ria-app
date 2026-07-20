@@ -1,6 +1,6 @@
 "use client";
 
-import { getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
 import type { SpeechStyle } from "@/types/database";
 
 interface Props {
@@ -12,7 +12,7 @@ export function RiaMessage({
   message,
   speechStyle = "formal",
 }: Props) {
-  const copy = getDictionary().home.suggestion;
+  const copy = useDictionary().home.suggestion;
 
   return (
     <aside aria-label={copy.label} className="fade-in mb-8 border-l-2 border-balance bg-balance/5 px-4 py-3">

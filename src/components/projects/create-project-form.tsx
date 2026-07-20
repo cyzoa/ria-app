@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { createProject } from "@/lib/actions/projects";
-import { getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
 import type { SpeechStyle } from "@/types/database";
 
 export function CreateProjectForm({ speechStyle }: { speechStyle: SpeechStyle }) {
@@ -10,7 +10,7 @@ export function CreateProjectForm({ speechStyle }: { speechStyle: SpeechStyle })
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const submittingRef = useRef(false);
-  const dictionary = getDictionary();
+  const dictionary = useDictionary();
   const copy = dictionary.projects.create;
 
   function handleSubmit(formData: FormData) {

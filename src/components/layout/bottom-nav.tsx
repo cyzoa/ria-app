@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
 
 function isPathActive(pathname: string, activePaths: readonly string[]) {
   return activePaths.some(
@@ -13,7 +13,7 @@ function isPathActive(pathname: string, activePaths: readonly string[]) {
 
 export function BottomNav() {
   const pathname = usePathname();
-  const copy = getDictionary().navigation;
+  const copy = useDictionary().navigation;
   const navItems = [
     { href: "/home", label: copy.today, icon: "🏠", activePaths: ["/home"] },
     { href: "/tasks", label: copy.tasks, icon: "✓", activePaths: ["/tasks"] },

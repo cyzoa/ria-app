@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { getDictionary } from "@/locales";
+import { getRequestDictionary } from "@/lib/locale";
 
-export default function MorePage() {
-  const dictionary = getDictionary();
+export default async function MorePage() {
+  const dictionary = await getRequestDictionary();
   const copy = dictionary.more;
   const moreLinks = [
     {

@@ -2,7 +2,8 @@
 
 import { useState, useTransition } from "react";
 import { saveNorthStar } from "@/lib/actions/north-star";
-import { formatMessage, getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
+import { formatMessage } from "@/locales/types";
 import type { NorthStar } from "@/types/database";
 import type { SpeechStyle } from "@/types/database";
 
@@ -16,7 +17,7 @@ export function NorthStarSection({ northStar, speechStyle = "formal" }: Props) {
   const [title, setTitle] = useState(northStar?.title ?? "");
   const [pending, startTransition] = useTransition();
 
-  const dictionary = getDictionary();
+  const dictionary = useDictionary();
   const copy = dictionary.home.direction;
 
   function handleSave() {

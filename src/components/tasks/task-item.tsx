@@ -11,7 +11,8 @@ import {
 } from "@/lib/actions/tasks";
 import type { Project, Task, TaskPriority } from "@/types/database";
 import { cn } from "@/lib/utils";
-import { formatMessage, getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
+import { formatMessage } from "@/locales/types";
 
 interface Props {
   task: Task;
@@ -23,7 +24,7 @@ export function TaskItem({ task, projects, emphasis = false }: Props) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const project = projects.find((candidate) => candidate.id === task.project_id);
-  const copy = getDictionary().tasks;
+  const copy = useDictionary().tasks;
   const priorityLabel: Record<TaskPriority, string> = copy.priority;
 
   function run(action: () => Promise<{ error?: string }>) {

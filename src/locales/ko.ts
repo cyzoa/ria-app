@@ -14,7 +14,10 @@ export const ko = {
       deleting: "삭제 중…",
       processing: "처리 중…",
     },
-    count: "{count}개",
+    count: {
+      one: "{count}개",
+      other: "{count}개",
+    },
   },
   navigation: {
     label: "주요 내비게이션",
@@ -28,8 +31,14 @@ export const ko = {
   },
   appShell: {
     logout: {
-      formal: "다음에 또 봬요, 오빠",
-      casual: "다음에 또 봐, 오빠",
+      formal: {
+        withName: "다음에 또 봬요, {name}",
+        withoutName: "다음에 또 봬요",
+      },
+      casual: {
+        withName: "다음에 또 봐, {name}",
+        withoutName: "다음에 또 봐",
+      },
     },
     voice: {
       openLabel: "RIA 음성 입력 열기",
@@ -43,16 +52,34 @@ export const ko = {
   home: {
     greeting: {
       morning: {
-        formal: "좋은 아침이에요",
-        casual: "좋은 아침이야",
+        formal: {
+          withName: "좋은 아침이에요, {name}",
+          withoutName: "좋은 아침이에요.",
+        },
+        casual: {
+          withName: "좋은 아침이야, {name}",
+          withoutName: "좋은 아침이야.",
+        },
       },
       afternoon: {
-        formal: "오후 리듬을 같이 볼까요",
-        casual: "좋은 오후야",
+        formal: {
+          withName: "오후 리듬을 같이 볼까요, {name}",
+          withoutName: "오후 리듬을 같이 볼까요.",
+        },
+        casual: {
+          withName: "좋은 오후야, {name}",
+          withoutName: "좋은 오후야.",
+        },
       },
       evening: {
-        formal: "오늘 하루를 천천히 정리해볼까요",
-        casual: "좋은 저녁이야",
+        formal: {
+          withName: "오늘 하루를 천천히 정리해볼까요, {name}",
+          withoutName: "오늘 하루를 천천히 정리해볼까요.",
+        },
+        casual: {
+          withName: "좋은 저녁이야, {name}",
+          withoutName: "좋은 저녁이야.",
+        },
       },
     },
     casualDefaultName: "오빠",
@@ -292,7 +319,10 @@ export const ko = {
         formal: "아직 만든 Project가 없어요. 필요할 때 새로운 방향을 묶어보세요.",
         casual: "아직 만든 Project가 없어. 필요할 때 새로운 방향을 묶어봐.",
       },
-      taskCount: "연결된 Task {count}개",
+      taskCount: {
+        one: "연결된 Task {count}개",
+        other: "연결된 Task {count}개",
+      },
       deleteLabel: "{name} Project 삭제",
     },
   },
@@ -334,8 +364,25 @@ export const ko = {
       },
       optionLabel: "{label} {state}",
     },
+    language: {
+      title: "언어 설정",
+      description: {
+        formal: "RIA에서 사용할 언어를 선택하세요.",
+        casual: "RIA에서 사용할 언어를 골라봐.",
+      },
+      legend: "RIA 언어 선택",
+      selected: "선택됨",
+      select: "선택",
+      saving: "언어를 바꾸고 있어요…",
+      saved: "언어를 변경했어요.",
+      saveError: "언어 설정을 저장하지 못했어요. 다시 시도해주세요.",
+      optionLabel: "{label} {state}",
+    },
   },
   accessibility: {
-    itemCount: "{count}개",
+    itemCount: {
+      one: "{count}개",
+      other: "{count}개",
+    },
   },
 } as const;

@@ -1,11 +1,21 @@
 "use client";
 
 import { logout } from "@/lib/actions/auth";
-import { getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
+import { formatMessage } from "@/locales/types";
 import type { SpeechStyle } from "@/types/database";
 
-export function LogoutButton({ speechStyle }: { speechStyle: SpeechStyle }) {
-  const copy = getDictionary().appShell.logout;
+export function LogoutButton({
+  displayName,
+  speechStyle,
+}: {
+  displayName: string;
+  speechStyle: SpeechStyle;
+}) {
+  const copy = useDictionary().appShell.logout[speechStyle];
+  const label = displayName
+    ? formatMessage(copy.withName, { name: displayName })
+    : copy.withoutName;
 
   return (
     <form action={logout}>
@@ -13,7 +23,7 @@ export function LogoutButton({ speechStyle }: { speechStyle: SpeechStyle }) {
         type="submit"
         className="text-stone text-[13px] hover:text-soft-black transition-colors"
       >
-        {copy[speechStyle]}
+        {label}
       </button>
     </form>
   );

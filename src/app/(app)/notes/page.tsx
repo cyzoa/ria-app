@@ -2,14 +2,14 @@ import { redirect } from "next/navigation";
 import { getNotesData } from "@/lib/queries/notes";
 import { CreateNoteForm } from "@/components/notes/create-note-form";
 import { NoteList } from "@/components/notes/note-list";
-import { getDictionary } from "@/locales";
+import { getRequestDictionary } from "@/lib/locale";
 
 export default async function NotesPage() {
-  const data = await getNotesData();
+  const [data, dictionary] = await Promise.all([getNotesData(), getRequestDictionary()]);
   if (!data) redirect("/login");
 
   const speechStyle = data.profile?.speech_style ?? "formal";
-  const copy = getDictionary().notes;
+  const copy = dictionary.notes;
 
   return (
     <div className="fade-in px-5 pt-10 sm:px-6 sm:pt-12">

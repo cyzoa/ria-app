@@ -1,22 +1,35 @@
 import { DEFAULT_LOCALE, resolveLocale, type SupportedLocale } from "@/locales/config";
+import { en } from "@/locales/en";
+import { ja } from "@/locales/ja";
 import { ko } from "@/locales/ko";
-import type { WidenDictionary } from "@/locales/types";
+import type { Dictionary } from "@/locales/schema";
 
-export type AppDictionary = WidenDictionary<typeof ko>;
-
-const dictionaries: Record<SupportedLocale, AppDictionary> = {
+const dictionaries = {
   ko,
-};
+  en,
+  ja,
+} satisfies Record<SupportedLocale, Dictionary>;
 
-export function getDictionary(locale: SupportedLocale = DEFAULT_LOCALE): AppDictionary {
+export function getDictionary(locale: SupportedLocale = DEFAULT_LOCALE): Dictionary {
   return dictionaries[locale] ?? dictionaries[DEFAULT_LOCALE];
 }
 
-export function getDictionaryForPreference(preference: string | null | undefined): AppDictionary {
+export function getDictionaryForPreference(preference: string | null | undefined): Dictionary {
   return getDictionary(resolveLocale(preference));
 }
 
-export { DEFAULT_LOCALE, INTL_LOCALES, SUPPORTED_LOCALES, isSupportedLocale, resolveLocale } from "@/locales/config";
-export { formatMessage, getSpeechStyleCopy } from "@/locales/types";
+export {
+  DEFAULT_LOCALE,
+  INTL_LOCALES,
+  LOCALE_COOKIE_MAX_AGE,
+  LOCALE_COOKIE_NAME,
+  LOCALE_METADATA,
+  PLANNED_LOCALES,
+  SUPPORTED_LOCALES,
+  isSupportedLocale,
+  resolveLocale,
+} from "@/locales/config";
+export { formatCountMessage, formatMessage, getSpeechStyleCopy } from "@/locales/types";
+export type { Dictionary } from "@/locales/schema";
 export type { SupportedLocale } from "@/locales/config";
-export type { SpeechStyleCopy } from "@/locales/types";
+export type { CountMessage, SpeechStyleCopy } from "@/locales/types";

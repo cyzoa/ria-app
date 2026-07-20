@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { updateSpeechStyle } from "@/lib/actions/settings";
-import { formatMessage, getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
+import { formatMessage } from "@/locales/types";
 import type { SpeechStyle } from "@/types/database";
 
 interface Props {
@@ -19,7 +20,7 @@ export function SpeechStyleToggle({ currentStyle }: Props) {
   const [pending, startTransition] = useTransition();
   const mutationRef = useRef(false);
   const router = useRouter();
-  const copy = getDictionary().settings.speechStyle;
+  const copy = useDictionary().settings.speechStyle;
   const styleOptions: Array<{
     value: SpeechStyle;
     label: string;

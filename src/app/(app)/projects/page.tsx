@@ -2,14 +2,14 @@ import { redirect } from "next/navigation";
 import { getProjectsData } from "@/lib/queries/projects";
 import { CreateProjectForm } from "@/components/projects/create-project-form";
 import { ProjectList } from "@/components/projects/project-list";
-import { getDictionary } from "@/locales";
+import { getRequestDictionary } from "@/lib/locale";
 
 export default async function ProjectsPage() {
-  const data = await getProjectsData();
+  const [data, dictionary] = await Promise.all([getProjectsData(), getRequestDictionary()]);
   if (!data) redirect("/login");
 
   const speechStyle = data.profile?.speech_style ?? "formal";
-  const copy = getDictionary().projects;
+  const copy = dictionary.projects;
 
   return (
     <div className="fade-in px-5 pt-10 sm:px-6 sm:pt-12">

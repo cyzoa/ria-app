@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { createNote } from "@/lib/actions/notes";
-import { getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
 import type { SpeechStyle } from "@/types/database";
 
 export function CreateNoteForm({ speechStyle }: { speechStyle: SpeechStyle }) {
@@ -10,7 +10,7 @@ export function CreateNoteForm({ speechStyle }: { speechStyle: SpeechStyle }) {
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const submittingRef = useRef(false);
-  const dictionary = getDictionary();
+  const dictionary = useDictionary();
   const copy = dictionary.notes.create;
 
   function handleSubmit(formData: FormData) {

@@ -1,13 +1,18 @@
 import { redirect } from "next/navigation";
 import { getHomeData } from "@/lib/queries/home";
 import { SpeechStyleToggle } from "@/components/settings/speech-style-toggle";
-import { getDictionary } from "@/locales";
+import { LanguageSelector } from "@/components/settings/language-selector";
+import { getRequestDictionary, getRequestLocale } from "@/lib/locale";
 
 export default async function SettingsPage() {
-  const data = await getHomeData();
+  const [data, dictionary, locale] = await Promise.all([
+    getHomeData(),
+    getRequestDictionary(),
+    getRequestLocale(),
+  ]);
   if (!data) redirect("/login");
   const speechStyle = data.profile?.speech_style ?? "formal";
-  const copy = getDictionary().settings;
+  const copy = dictionary.settings;
 
   return (
     <div className="fade-in px-5 pt-10 sm:px-6 sm:pt-12">
@@ -19,7 +24,10 @@ export default async function SettingsPage() {
           {copy.description[speechStyle]}
         </p>
       </header>
-      <SpeechStyleToggle currentStyle={speechStyle} />
+      <div className="space-y-5">
+        <LanguageSelector currentLocale={locale} speechStyle={speechStyle} />
+        <SpeechStyleToggle currentStyle={speechStyle} />
+      </div>
     </div>
   );
 }

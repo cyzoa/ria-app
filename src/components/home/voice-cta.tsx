@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
 import type { SpeechStyle } from "@/types/database";
 
 export function VoiceCta({ speechStyle }: { speechStyle: SpeechStyle }) {
   const [isListening, setIsListening] = useState(false);
-  const copy = getDictionary().appShell.voice;
+  const copy = useDictionary().appShell.voice;
 
   function handleClick() {
     setIsListening(true);

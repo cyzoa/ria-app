@@ -1,12 +1,26 @@
 export const DEFAULT_LOCALE = "ko" as const;
 
-export const SUPPORTED_LOCALES = [DEFAULT_LOCALE] as const;
+export const SUPPORTED_LOCALES = [DEFAULT_LOCALE, "en", "ja"] as const;
+
+export const PLANNED_LOCALES = ["es", "fr", "de", "ru"] as const;
 
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
 
-export const INTL_LOCALES: Record<SupportedLocale, string> = {
-  ko: "ko-KR",
+export const LOCALE_COOKIE_NAME = "ria_locale";
+export const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
+export const LOCALE_METADATA: Record<
+  SupportedLocale,
+  { nativeLabel: string; intlLocale: string }
+> = {
+  ko: { nativeLabel: "한국어", intlLocale: "ko-KR" },
+  en: { nativeLabel: "English", intlLocale: "en" },
+  ja: { nativeLabel: "日本語", intlLocale: "ja-JP" },
 };
+
+export const INTL_LOCALES: Record<SupportedLocale, string> = Object.fromEntries(
+  SUPPORTED_LOCALES.map((locale) => [locale, LOCALE_METADATA[locale].intlLocale])
+) as Record<SupportedLocale, string>;
 
 export function isSupportedLocale(value: string | null | undefined): value is SupportedLocale {
   return SUPPORTED_LOCALES.some((locale) => locale === value);

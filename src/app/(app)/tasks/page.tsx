@@ -1,12 +1,12 @@
 import { redirect } from "next/navigation";
 import { getTasksData } from "@/lib/queries/tasks";
 import { TaskList } from "@/components/tasks/task-list";
-import { getDictionary } from "@/locales";
+import { getRequestDictionary } from "@/lib/locale";
 
 export default async function TasksPage() {
-  const data = await getTasksData();
+  const [data, dictionary] = await Promise.all([getTasksData(), getRequestDictionary()]);
   if (!data) redirect("/login");
-  const copy = getDictionary().tasks;
+  const copy = dictionary.tasks;
 
   return (
     <div className="fade-in px-5 pt-10 sm:px-6 sm:pt-12">

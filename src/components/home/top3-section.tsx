@@ -6,7 +6,8 @@ import { toggleTaskComplete } from "@/lib/actions/tasks";
 import type { Task } from "@/types/database";
 import type { SpeechStyle } from "@/types/database";
 import { cn } from "@/lib/utils";
-import { formatMessage, getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
+import { formatMessage } from "@/locales/types";
 
 interface Props {
   tasks: Task[];
@@ -16,7 +17,7 @@ interface Props {
 export function Top3Section({ tasks, speechStyle = "formal" }: Props) {
   const [pending, startTransition] = useTransition();
   const router = useRouter();
-  const copy = getDictionary().home.priorities;
+  const copy = useDictionary().home.priorities;
 
   function handleToggle(task: Task) {
     startTransition(async () => {

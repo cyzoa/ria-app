@@ -3,24 +3,32 @@
 import { useRouter } from "next/navigation";
 import type { Task } from "@/types/database";
 import type { SpeechStyle } from "@/types/database";
-import { getDictionary, INTL_LOCALES } from "@/locales";
+import { useLocale } from "@/components/providers/locale-provider";
+import { INTL_LOCALES, type SupportedLocale } from "@/locales/config";
 
 interface Props {
   tasks: Task[];
   speechStyle?: SpeechStyle;
+  timeZone?: string;
 }
 
-function formatScheduleTime(dueDate: string) {
-  return new Date(dueDate).toLocaleTimeString(INTL_LOCALES.ko, {
+function formatScheduleTime(dueDate: string, locale: SupportedLocale, timeZone: string) {
+  return new Date(dueDate).toLocaleTimeString(INTL_LOCALES[locale], {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone,
   });
 }
 
-export function ScheduleSection({ tasks, speechStyle = "formal" }: Props) {
+export function ScheduleSection({
+  tasks,
+  speechStyle = "formal",
+  timeZone = "Asia/Seoul",
+}: Props) {
   const router = useRouter();
   const [nextTask, ...laterTasks] = tasks;
-  const copy = getDictionary().home.schedule;
+  const { dictionary, locale } = useLocale();
+  const copy = dictionary.home.schedule;
 
   return (
     <section aria-labelledby="schedule-title" className="mb-10">
@@ -54,7 +62,7 @@ export function ScheduleSection({ tasks, speechStyle = "formal" }: Props) {
                   dateTime={nextTask.due_date}
                   className="shrink-0 rounded-full bg-primary-soft px-3 py-2 text-sm font-semibold text-primary"
                 >
-                  {formatScheduleTime(nextTask.due_date)}
+                  {formatScheduleTime(nextTask.due_date, locale, timeZone)}
                 </time>
               )}
               <div className="min-w-0 flex-1 py-1">
@@ -77,7 +85,7 @@ export function ScheduleSection({ tasks, speechStyle = "formal" }: Props) {
                         dateTime={task.due_date}
                         className="w-16 shrink-0 text-sm font-medium text-text-secondary"
                       >
-                        {formatScheduleTime(task.due_date)}
+                        {formatScheduleTime(task.due_date, locale, timeZone)}
                       </time>
                     )}
                     <span className="min-w-0 break-words text-sm leading-relaxed text-text-primary [overflow-wrap:anywhere]">

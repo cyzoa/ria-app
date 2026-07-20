@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { createInboxItem } from "@/lib/actions/inbox";
-import { getDictionary } from "@/locales";
+import { useDictionary } from "@/components/providers/locale-provider";
 import type { SpeechStyle } from "@/types/database";
 
 export function CreateInboxForm({ speechStyle }: { speechStyle: SpeechStyle }) {
@@ -10,7 +10,7 @@ export function CreateInboxForm({ speechStyle }: { speechStyle: SpeechStyle }) {
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const submittingRef = useRef(false);
-  const copy = getDictionary().inbox.capture;
+  const copy = useDictionary().inbox.capture;
 
   function handleSubmit(formData: FormData) {
     if (submittingRef.current) return;
