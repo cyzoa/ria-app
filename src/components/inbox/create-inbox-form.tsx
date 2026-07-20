@@ -2,6 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { createInboxItem } from "@/lib/actions/inbox";
+import { getDictionary } from "@/locales";
 import type { SpeechStyle } from "@/types/database";
 
 export function CreateInboxForm({ speechStyle }: { speechStyle: SpeechStyle }) {
@@ -9,6 +10,7 @@ export function CreateInboxForm({ speechStyle }: { speechStyle: SpeechStyle }) {
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const submittingRef = useRef(false);
+  const copy = getDictionary().inbox.capture;
 
   function handleSubmit(formData: FormData) {
     if (submittingRef.current) return;
@@ -36,17 +38,13 @@ export function CreateInboxForm({ speechStyle }: { speechStyle: SpeechStyle }) {
       className="mb-10 rounded-2xl bg-primary-soft p-4 sm:p-5"
     >
       <label htmlFor="inbox-content" className="mb-2 block text-sm font-semibold text-primary">
-        빠른 기록
+        {copy.title}
       </label>
       <textarea
         id="inbox-content"
         name="content"
         required
-        placeholder={
-          speechStyle === "casual"
-            ? "잊기 전에 여기에 적어둬"
-            : "잊기 전에 여기에 적어두세요"
-        }
+        placeholder={copy.placeholder[speechStyle]}
         className="min-h-32 w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-base leading-6 text-text-primary placeholder:text-text-secondary/75"
         rows={4}
       />
@@ -63,7 +61,7 @@ export function CreateInboxForm({ speechStyle }: { speechStyle: SpeechStyle }) {
           disabled={pending}
           className="min-h-12 min-w-28 rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-80"
         >
-          {pending ? "기록 중…" : "기록하기"}
+          {pending ? copy.pending : copy.submit}
         </button>
       </div>
     </form>

@@ -2,6 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { createNote } from "@/lib/actions/notes";
+import { getDictionary } from "@/locales";
 import type { SpeechStyle } from "@/types/database";
 
 export function CreateNoteForm({ speechStyle }: { speechStyle: SpeechStyle }) {
@@ -9,6 +10,8 @@ export function CreateNoteForm({ speechStyle }: { speechStyle: SpeechStyle }) {
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const submittingRef = useRef(false);
+  const dictionary = getDictionary();
+  const copy = dictionary.notes.create;
 
   function handleSubmit(formData: FormData) {
     if (submittingRef.current) return;
@@ -37,17 +40,13 @@ export function CreateNoteForm({ speechStyle }: { speechStyle: SpeechStyle }) {
       className="rounded-2xl bg-primary-soft p-4 sm:p-5"
     >
       <label htmlFor="note-content" className="mb-2 block text-sm font-semibold text-primary">
-        새 Note
+        {copy.title}
       </label>
       <textarea
         id="note-content"
         name="content"
         required
-        placeholder={
-          speechStyle === "casual"
-            ? "오래 남겨두고 싶은 생각을 적어봐"
-            : "오래 남겨두고 싶은 생각을 적어보세요"
-        }
+        placeholder={copy.placeholder[speechStyle]}
         className="min-h-40 w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-base leading-7 text-text-primary placeholder:text-text-secondary/75"
         rows={6}
       />
@@ -64,7 +63,7 @@ export function CreateNoteForm({ speechStyle }: { speechStyle: SpeechStyle }) {
           disabled={pending}
           className="min-h-12 min-w-28 rounded-xl bg-primary px-5 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-80"
         >
-          {pending ? "저장 중…" : "Note 저장"}
+          {pending ? dictionary.common.pending.saving : copy.submit}
         </button>
       </div>
     </form>

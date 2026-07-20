@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { convertToTask, deleteInboxItem } from "@/lib/actions/inbox";
+import { formatMessage, getDictionary } from "@/locales";
 import type { SpeechStyle } from "@/types/database";
 
 interface InboxItem {
@@ -15,17 +16,6 @@ interface Props {
   items: InboxItem[];
   speechStyle?: SpeechStyle;
 }
-
-const emptyMessages = {
-  formal: {
-    empty: "지금 내려놓을 생각이 생기면 여기에 적어두세요.",
-    description: "정리가 필요할 때 천천히 살펴보세요.",
-  },
-  casual: {
-    empty: "지금 내려놓을 생각이 생기면 여기에 적어둬.",
-    description: "정리가 필요할 때 천천히 살펴봐.",
-  },
-};
 
 export function InboxList({ items, speechStyle = "formal" }: Props) {
   const [pending, startTransition] = useTransition();
@@ -59,16 +49,18 @@ export function InboxList({ items, speechStyle = "formal" }: Props) {
   }
 
   const unconvertedItems = items.filter((item) => !item.converted_to_task);
+  const dictionary = getDictionary();
+  const copy = dictionary.inbox;
 
   if (unconvertedItems.length === 0) {
     return (
       <section aria-labelledby="inbox-items-heading">
         <h2 id="inbox-items-heading" className="text-lg font-semibold text-text-primary">
-          기록된 생각
+          {copy.list.title}
         </h2>
         <div className="mt-4 rounded-2xl bg-surface-muted px-5 py-6">
           <p className="text-base leading-7 text-text-secondary">
-            {emptyMessages[speechStyle].empty}
+            {copy.list.empty[speechStyle]}
           </p>
         </div>
       </section>
@@ -80,15 +72,15 @@ export function InboxList({ items, speechStyle = "formal" }: Props) {
       <div className="mb-4 flex items-end justify-between gap-4">
         <div>
           <h2 id="inbox-items-heading" className="text-lg font-semibold text-text-primary">
-            기록된 생각
+            {copy.list.title}
           </h2>
           <p className="mt-1 text-sm leading-5 text-text-secondary">
-            {emptyMessages[speechStyle].description}
+            {copy.list.description[speechStyle]}
           </p>
         </div>
         <span
           className="shrink-0 text-sm tabular-nums text-text-secondary"
-          aria-label={`${unconvertedItems.length}개`}
+          aria-label={formatMessage(dictionary.accessibility.itemCount, { count: unconvertedItems.length })}
         >
           {unconvertedItems.length}
         </span>
@@ -108,19 +100,19 @@ export function InboxList({ items, speechStyle = "formal" }: Props) {
                   type="button"
                   onClick={() => handleConvert(item.id)}
                   disabled={pending}
-                  aria-label="Inbox 항목을 Task로 옮기기"
+                  aria-label={copy.item.convertLabel}
                   className="min-h-11 rounded-lg bg-primary-soft px-4 py-2 text-sm font-medium text-primary disabled:opacity-80"
                 >
-                  {isPending ? "처리 중…" : "Task로 옮기기"}
+                  {isPending ? dictionary.common.pending.processing : copy.item.convert}
                 </button>
                 <button
                   type="button"
                   onClick={() => handleDelete(item.id)}
                   disabled={pending}
-                  aria-label="Inbox 항목 삭제"
+                  aria-label={copy.item.deleteLabel}
                   className="min-h-11 rounded-lg px-4 py-2 text-sm font-medium text-danger disabled:opacity-80"
                 >
-                  삭제
+                  {dictionary.common.actions.delete}
                 </button>
               </div>
               {error && activeItemId === item.id && (

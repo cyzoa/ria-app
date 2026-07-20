@@ -2,6 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { deleteProject } from "@/lib/actions/projects";
+import { formatMessage, getDictionary } from "@/locales";
 import type { SpeechStyle } from "@/types/database";
 
 interface Project {
@@ -16,22 +17,13 @@ interface Props {
   speechStyle?: SpeechStyle;
 }
 
-const emptyMessages = {
-  formal: {
-    empty: "아직 만든 Project가 없어요. 필요할 때 새로운 방향을 묶어보세요.",
-    description: "작업이 묶인 방향을 한눈에 살펴보세요.",
-  },
-  casual: {
-    empty: "아직 만든 Project가 없어. 필요할 때 새로운 방향을 묶어봐.",
-    description: "작업이 묶인 방향을 한눈에 살펴봐.",
-  },
-};
-
 export function ProjectList({ projects, speechStyle = "formal" }: Props) {
   const [pending, startTransition] = useTransition();
   const [activeProjectId, setActiveProjectId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const mutationRef = useRef(false);
+  const dictionary = getDictionary();
+  const copy = dictionary.projects;
 
   function handleDelete(projectId: string) {
     if (mutationRef.current) return;
@@ -57,11 +49,11 @@ export function ProjectList({ projects, speechStyle = "formal" }: Props) {
     return (
       <section aria-labelledby="project-list-heading">
         <h2 id="project-list-heading" className="text-lg font-semibold text-text-primary">
-          현재 Project
+          {copy.list.title}
         </h2>
         <div className="mt-4 rounded-2xl bg-surface-muted px-5 py-6">
           <p className="text-base leading-7 text-text-secondary">
-            {emptyMessages[speechStyle].empty}
+            {copy.list.empty[speechStyle]}
           </p>
         </div>
       </section>
@@ -73,13 +65,13 @@ export function ProjectList({ projects, speechStyle = "formal" }: Props) {
       <div className="mb-4 flex items-end justify-between gap-4">
         <div>
           <h2 id="project-list-heading" className="text-lg font-semibold text-text-primary">
-            현재 Project
+            {copy.list.title}
           </h2>
           <p className="mt-1 text-sm leading-5 text-text-secondary">
-            {emptyMessages[speechStyle].description}
+            {copy.list.description[speechStyle]}
           </p>
         </div>
-        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={`${projects.length}개`}>
+        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={formatMessage(dictionary.accessibility.itemCount, { count: projects.length })}>
           {projects.length}
         </span>
       </div>
@@ -104,7 +96,7 @@ export function ProjectList({ projects, speechStyle = "formal" }: Props) {
                   {project.name}
                 </h3>
                 <p className="mt-1 text-sm text-text-secondary">
-                  연결된 Task {project.taskCount}개
+                  {formatMessage(copy.list.taskCount, { count: project.taskCount })}
                 </p>
                 {error && activeProjectId === project.id && (
                   <p role="alert" className="mt-3 text-sm leading-5 text-danger">
@@ -116,10 +108,10 @@ export function ProjectList({ projects, speechStyle = "formal" }: Props) {
                 type="button"
                 onClick={() => handleDelete(project.id)}
                 disabled={pending}
-                aria-label={`${project.name} Project 삭제`}
+                aria-label={formatMessage(copy.list.deleteLabel, { name: project.name })}
                 className="min-h-11 shrink-0 rounded-lg px-3 py-2 text-sm font-medium text-danger disabled:opacity-80"
               >
-                {isPending ? "삭제 중…" : "삭제"}
+                {isPending ? dictionary.common.pending.deleting : dictionary.common.actions.delete}
               </button>
             </li>
           );

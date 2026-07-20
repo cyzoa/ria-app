@@ -2,6 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { createProject } from "@/lib/actions/projects";
+import { getDictionary } from "@/locales";
 import type { SpeechStyle } from "@/types/database";
 
 export function CreateProjectForm({ speechStyle }: { speechStyle: SpeechStyle }) {
@@ -9,6 +10,8 @@ export function CreateProjectForm({ speechStyle }: { speechStyle: SpeechStyle })
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const submittingRef = useRef(false);
+  const dictionary = getDictionary();
+  const copy = dictionary.projects.create;
 
   function handleSubmit(formData: FormData) {
     if (submittingRef.current) return;
@@ -39,7 +42,7 @@ export function CreateProjectForm({ speechStyle }: { speechStyle: SpeechStyle })
         <span aria-hidden="true" className="text-xl leading-none">
           +
         </span>
-        새 Project 만들기
+        {copy.open}
       </button>
     );
   }
@@ -52,21 +55,21 @@ export function CreateProjectForm({ speechStyle }: { speechStyle: SpeechStyle })
     >
       <div>
         <label htmlFor="project-name" className="mb-2 block text-sm font-medium text-text-primary">
-          Project 이름
+          {copy.nameLabel}
         </label>
         <input
           id="project-name"
           name="name"
           required
           autoFocus
-          placeholder="함께 묶어둘 일의 이름"
+          placeholder={copy.namePlaceholder}
           className="min-h-12 w-full rounded-xl border border-border bg-surface px-3 py-2 text-base text-text-primary placeholder:text-text-secondary/75"
         />
       </div>
 
       <div>
         <label htmlFor="project-color" className="mb-2 block text-sm font-medium text-text-primary">
-          구분 색상
+          {copy.colorLabel}
         </label>
         <div className="flex min-w-0 items-center gap-3">
           <input
@@ -77,9 +80,7 @@ export function CreateProjectForm({ speechStyle }: { speechStyle: SpeechStyle })
             className="h-12 w-12 shrink-0 rounded-xl border border-border bg-surface p-1"
           />
           <p className="min-w-0 text-sm leading-5 text-text-secondary">
-            {speechStyle === "casual"
-              ? "이름과 함께 Project를 구분하는 보조 색상이야."
-              : "이름과 함께 Project를 구분하는 보조 색상이에요."}
+            {copy.colorHelp[speechStyle]}
           </p>
         </div>
       </div>
@@ -96,7 +97,7 @@ export function CreateProjectForm({ speechStyle }: { speechStyle: SpeechStyle })
           disabled={pending}
           className="min-h-12 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-80"
         >
-          {pending ? "추가 중…" : "Project 추가"}
+          {pending ? dictionary.common.pending.adding : copy.submit}
         </button>
         <button
           type="button"
@@ -107,7 +108,7 @@ export function CreateProjectForm({ speechStyle }: { speechStyle: SpeechStyle })
           }}
           className="min-h-12 rounded-xl border border-border bg-surface-muted px-4 py-2 text-sm font-medium text-text-secondary disabled:opacity-80"
         >
-          취소
+          {dictionary.common.actions.cancel}
         </button>
       </div>
     </form>

@@ -11,6 +11,7 @@ import {
 } from "@/lib/actions/tasks";
 import type { Project, Task, TaskPriority } from "@/types/database";
 import { cn } from "@/lib/utils";
+import { formatMessage, getDictionary } from "@/locales";
 
 interface Props {
   task: Task;
@@ -18,23 +19,12 @@ interface Props {
   emphasis?: boolean;
 }
 
-const priorityLabel: Record<TaskPriority, string> = {
-  low: "낮음",
-  medium: "보통",
-  high: "높음",
-};
-
-const statusLabel = {
-  todo: "진행 전",
-  doing: "진행 중",
-  done: "완료",
-  archived: "보관됨",
-} as const;
-
 export function TaskItem({ task, projects, emphasis = false }: Props) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const project = projects.find((candidate) => candidate.id === task.project_id);
+  const copy = getDictionary().tasks;
+  const priorityLabel: Record<TaskPriority, string> = copy.priority;
 
   function run(action: () => Promise<{ error?: string }>) {
     setError(null);
@@ -54,7 +44,10 @@ export function TaskItem({ task, projects, emphasis = false }: Props) {
           type="button"
           onClick={() => run(() => toggleTaskComplete(task.id, task.status !== "done"))}
           disabled={pending}
-          aria-label={`${task.title}, ${task.status === "done" ? "미완료로 변경" : "완료로 변경"}`}
+          aria-label={formatMessage(
+            task.status === "done" ? copy.item.reopenLabel : copy.item.completeLabel,
+            { title: task.title }
+          )}
           className={cn(
             "flex h-11 w-11 shrink-0 items-center justify-center rounded-full border transition-colors disabled:cursor-not-allowed",
             task.status === "done"
@@ -79,7 +72,7 @@ export function TaskItem({ task, projects, emphasis = false }: Props) {
           </p>
 
           <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 text-sm text-text-secondary">
-            <span>{statusLabel[task.status]}</span>
+            <span>{copy.status[task.status]}</span>
             {project && (
               <span className="inline-flex min-w-0 max-w-full items-center gap-1.5">
                 <span
@@ -90,14 +83,14 @@ export function TaskItem({ task, projects, emphasis = false }: Props) {
                 <span className="truncate">{project.name}</span>
               </span>
             )}
-            {task.is_top3 && <span className="font-medium text-accent">Top 3</span>}
+            {task.is_top3 && <span className="font-medium text-accent">{copy.item.top3}</span>}
           </div>
         </div>
       </div>
 
       <div className="mt-4 grid gap-3 pl-14 sm:grid-cols-2">
         <label className="min-w-0 text-xs font-medium text-text-secondary">
-          <span className="mb-1 block">우선순위</span>
+          <span className="mb-1 block">{copy.item.priority}</span>
           <select
             value={task.priority}
             disabled={pending}
@@ -115,7 +108,7 @@ export function TaskItem({ task, projects, emphasis = false }: Props) {
         </label>
 
         <label className="min-w-0 text-xs font-medium text-text-secondary">
-          <span className="mb-1 block">Project</span>
+          <span className="mb-1 block">{copy.item.project}</span>
           <select
             value={task.project_id ?? ""}
             disabled={pending}
@@ -124,7 +117,7 @@ export function TaskItem({ task, projects, emphasis = false }: Props) {
             }
             className="min-h-11 w-full rounded-lg border border-border bg-surface px-3 py-2 text-base text-text-primary disabled:opacity-80"
           >
-            <option value="">Project 없음</option>
+            <option value="">{copy.create.noProject}</option>
             {projects.map((candidate) => (
               <option key={candidate.id} value={candidate.id}>
                 {candidate.name}
@@ -139,30 +132,33 @@ export function TaskItem({ task, projects, emphasis = false }: Props) {
           type="button"
           disabled={pending}
           onClick={() => run(() => setTaskTop3(task.id, !task.is_top3))}
-          aria-label={`${task.title} Task를 ${task.is_top3 ? "Top 3에서 빼기" : "Top 3에 두기"}`}
+          aria-label={formatMessage(
+            task.is_top3 ? copy.item.removeTop3Label : copy.item.addTop3Label,
+            { title: task.title }
+          )}
           className="min-h-11 rounded-lg bg-primary-soft px-3 py-2 text-sm font-medium text-primary disabled:opacity-80"
         >
-          {task.is_top3 ? "Top 3에서 빼기" : "Top 3에 두기"}
+          {task.is_top3 ? copy.item.removeTop3 : copy.item.addTop3}
         </button>
 
         <button
           type="button"
           disabled={pending}
           onClick={() => run(() => archiveTask(task.id))}
-          aria-label={`${task.title} Task 보관`}
+          aria-label={formatMessage(copy.item.archiveLabel, { title: task.title })}
           className="min-h-11 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-text-secondary disabled:opacity-80"
         >
-          보관
+          {copy.item.archive}
         </button>
 
         <button
           type="button"
           disabled={pending}
           onClick={() => run(() => deleteTask(task.id))}
-          aria-label={`${task.title} Task 삭제`}
+          aria-label={formatMessage(copy.item.deleteLabel, { title: task.title })}
           className="min-h-11 rounded-lg px-3 py-2 text-sm font-medium text-danger disabled:opacity-80"
         >
-          삭제
+          {copy.item.delete}
         </button>
       </div>
 

@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { CreateTaskForm } from "./create-task-form";
 import { TaskItem } from "./task-item";
 import type { Project, Task, TaskStatus } from "@/types/database";
+import { formatMessage, getDictionary } from "@/locales";
 
 interface Props {
   tasks: Task[];
@@ -13,6 +14,8 @@ interface Props {
 export function TaskList({ tasks, projects }: Props) {
   const [statusFilter, setStatusFilter] = useState<TaskStatus | "all">("all");
   const [projectFilter, setProjectFilter] = useState<string>("all");
+  const dictionary = getDictionary();
+  const copy = dictionary.tasks;
 
   const filtered = useMemo(() => {
     return tasks.filter((task) => {
@@ -39,16 +42,16 @@ export function TaskList({ tasks, projects }: Props) {
         <div className="rounded-2xl bg-surface-muted px-5 py-6">
           <p className="text-base leading-7 text-text-secondary">
             {filtersActive
-              ? "선택한 조건에 맞는 Task 없음. 보기 조건 다시 선택."
-              : "아직 등록된 Task 없음. 떠오른 다음 한 걸음부터 가볍게 기록."}
+              ? copy.emptyFiltered
+              : copy.empty}
           </p>
         </div>
       ) : (
         <div className="space-y-10">
           {topTasks.length > 0 && (
             <TaskSection
-              title="지금 중요한 작업"
-              description="오늘 먼저 살펴볼 Top 3"
+              title={copy.sections.important}
+              description={copy.sections.importantDescription}
               tasks={topTasks}
               projects={projects}
               emphasis
@@ -57,8 +60,8 @@ export function TaskList({ tasks, projects }: Props) {
 
           {activeTasks.length > 0 && (
             <TaskSection
-              title="진행 중인 작업"
-              description="필요한 순간에 하나씩 이어가기"
+              title={copy.sections.active}
+              description={copy.sections.activeDescription}
               tasks={activeTasks}
               projects={projects}
             />
@@ -66,8 +69,8 @@ export function TaskList({ tasks, projects }: Props) {
 
           {completedTasks.length > 0 && (
             <TaskSection
-              title="완료한 작업"
-              description="필요하면 다시 미완료로 변경 가능"
+              title={copy.sections.completed}
+              description={copy.sections.completedDescription}
               tasks={completedTasks}
               projects={projects}
               quiet
@@ -79,15 +82,15 @@ export function TaskList({ tasks, projects }: Props) {
       <section aria-labelledby="task-filter-heading" className="border-t border-border pt-6">
         <div className="mb-4">
           <h2 id="task-filter-heading" className="text-base font-semibold text-text-primary">
-            보기 조정
+            {copy.filters.title}
           </h2>
-          <p className="mt-1 text-sm text-text-secondary">상태나 Project로 목록 좁히기</p>
+          <p className="mt-1 text-sm text-text-secondary">{copy.filters.description}</p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
             <label htmlFor="task-status-filter" className="mb-2 block text-sm font-medium text-text-primary">
-              상태
+              {copy.filters.status}
             </label>
             <select
               id="task-status-filter"
@@ -95,16 +98,16 @@ export function TaskList({ tasks, projects }: Props) {
               onChange={(event) => setStatusFilter(event.target.value as TaskStatus | "all")}
               className="min-h-12 w-full rounded-xl border border-border bg-surface px-3 py-2 text-base text-text-primary"
             >
-              <option value="all">모든 상태</option>
-              <option value="todo">진행 전</option>
-              <option value="doing">진행 중</option>
-              <option value="done">완료</option>
+              <option value="all">{copy.status.all}</option>
+              <option value="todo">{copy.status.todo}</option>
+              <option value="doing">{copy.status.doing}</option>
+              <option value="done">{copy.status.done}</option>
             </select>
           </div>
 
           <div>
             <label htmlFor="task-project-filter" className="mb-2 block text-sm font-medium text-text-primary">
-              Project
+              {copy.filters.project}
             </label>
             <select
               id="task-project-filter"
@@ -112,7 +115,7 @@ export function TaskList({ tasks, projects }: Props) {
               onChange={(event) => setProjectFilter(event.target.value)}
               className="min-h-12 w-full rounded-xl border border-border bg-surface px-3 py-2 text-base text-text-primary"
             >
-              <option value="all">모든 Project</option>
+              <option value="all">{copy.filters.allProjects}</option>
               {projects.map((project) => (
                 <option key={project.id} value={project.id}>
                   {project.name}
@@ -161,7 +164,7 @@ function TaskSection({
           </h2>
           <p className="mt-1 text-sm leading-5 text-text-secondary">{description}</p>
         </div>
-        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={`${tasks.length}개`}>
+        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={formatMessage(getDictionary().accessibility.itemCount, { count: tasks.length })}>
           {tasks.length}
         </span>
       </div>

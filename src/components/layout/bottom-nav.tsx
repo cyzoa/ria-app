@@ -3,19 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-
-const navItems = [
-  { href: "/home", label: "Today", icon: "🏠", activePaths: ["/home"] },
-  { href: "/tasks", label: "Tasks", icon: "✓", activePaths: ["/tasks"] },
-  { href: "/inbox", label: "Inbox", icon: "📥", activePaths: ["/inbox"] },
-  { href: "/notes", label: "Notes", icon: "📝", activePaths: ["/notes"] },
-  {
-    href: "/more",
-    label: "More",
-    icon: "•••",
-    activePaths: ["/more", "/projects", "/settings"],
-  },
-] as const;
+import { getDictionary } from "@/locales";
 
 function isPathActive(pathname: string, activePaths: readonly string[]) {
   return activePaths.some(
@@ -25,10 +13,23 @@ function isPathActive(pathname: string, activePaths: readonly string[]) {
 
 export function BottomNav() {
   const pathname = usePathname();
+  const copy = getDictionary().navigation;
+  const navItems = [
+    { href: "/home", label: copy.today, icon: "🏠", activePaths: ["/home"] },
+    { href: "/tasks", label: copy.tasks, icon: "✓", activePaths: ["/tasks"] },
+    { href: "/inbox", label: copy.inbox, icon: "📥", activePaths: ["/inbox"] },
+    { href: "/notes", label: copy.notes, icon: "📝", activePaths: ["/notes"] },
+    {
+      href: "/more",
+      label: copy.more,
+      icon: "•••",
+      activePaths: ["/more", "/projects", "/settings"],
+    },
+  ] as const;
 
   return (
     <nav
-      aria-label="주요 내비게이션"
+      aria-label={copy.label}
       className="app-bottom-nav fixed inset-x-0 bottom-0 z-50 border-t border-border bg-background/95 backdrop-blur-md"
     >
       <div className="app-bottom-nav-inner mx-auto grid w-full max-w-lg grid-cols-5 items-stretch gap-1 px-2 py-1.5">

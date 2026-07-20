@@ -1,29 +1,29 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { getDictionary, INTL_LOCALES, type SupportedLocale } from "@/locales";
 import type { SpeechStyle } from "@/types/database";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function getGreeting(speechStyle: SpeechStyle = "formal"): string {
+export function getGreeting(
+  speechStyle: SpeechStyle = "formal",
+  locale: SupportedLocale = "ko"
+): string {
   const hour = new Date().getHours();
-  
-  if (speechStyle === "casual") {
-    // 반말 모드 (기존 Voice Guide v0.1 기준)
-    if (hour < 12) return "좋은 아침이야";
-    if (hour < 18) return "좋은 오후야";
-    return "좋은 저녁이야";
-  } else {
-    // 존댓말 모드 (새로운 Home Screen v1.0 기준)
-    if (hour < 12) return "좋은 아침이에요";
-    if (hour < 18) return "오후 리듬을 같이 볼까요";
-    return "오늘 하루를 천천히 정리해볼까요";
-  }
+  const greeting = getDictionary(locale).home.greeting;
+
+  if (hour < 12) return greeting.morning[speechStyle];
+  if (hour < 18) return greeting.afternoon[speechStyle];
+  return greeting.evening[speechStyle];
 }
 
-export function formatDate(date: Date = new Date()): string {
-  return date.toLocaleDateString("ko-KR", {
+export function formatDate(
+  date: Date = new Date(),
+  locale: SupportedLocale = "ko"
+): string {
+  return date.toLocaleDateString(INTL_LOCALES[locale], {
     weekday: "long",
     year: "numeric",
     month: "long",

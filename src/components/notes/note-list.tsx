@@ -2,6 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { updateNote, deleteNote } from "@/lib/actions/notes";
+import { formatMessage, getDictionary } from "@/locales";
 import type { SpeechStyle } from "@/types/database";
 
 interface Note {
@@ -15,17 +16,6 @@ interface Props {
   speechStyle?: SpeechStyle;
 }
 
-const emptyMessages = {
-  formal: {
-    empty: "아직 기록된 Note가 없어요. 오래 두고 싶은 생각이 생기면 남겨보세요.",
-    description: "최근에 남긴 생각부터 보여드려요.",
-  },
-  casual: {
-    empty: "아직 기록된 Note가 없어. 오래 두고 싶은 생각이 생기면 남겨봐.",
-    description: "최근에 남긴 생각부터 보여줄게.",
-  },
-};
-
 export function NoteList({ notes, speechStyle = "formal" }: Props) {
   const [pending, startTransition] = useTransition();
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -33,6 +23,8 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
   const [activeNoteId, setActiveNoteId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const mutationRef = useRef(false);
+  const dictionary = getDictionary();
+  const copy = dictionary.notes;
 
   function handleDelete(noteId: string) {
     if (mutationRef.current) return;
@@ -94,11 +86,11 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
     return (
       <section aria-labelledby="note-list-heading">
         <h2 id="note-list-heading" className="text-lg font-semibold text-text-primary">
-          최근 Note
+          {copy.list.title}
         </h2>
         <div className="mt-4 rounded-2xl bg-surface-muted px-5 py-6">
           <p className="text-base leading-7 text-text-secondary">
-            {emptyMessages[speechStyle].empty}
+            {copy.list.empty[speechStyle]}
           </p>
         </div>
       </section>
@@ -110,13 +102,13 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
       <div className="mb-4 flex items-end justify-between gap-4">
         <div>
           <h2 id="note-list-heading" className="text-lg font-semibold text-text-primary">
-            최근 Note
+            {copy.list.title}
           </h2>
           <p className="mt-1 text-sm leading-5 text-text-secondary">
-            {emptyMessages[speechStyle].description}
+            {copy.list.description[speechStyle]}
           </p>
         </div>
-        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={`${notes.length}개`}>
+        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={formatMessage(dictionary.accessibility.itemCount, { count: notes.length })}>
           {notes.length}
         </span>
       </div>
@@ -131,7 +123,7 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
               {isEditing ? (
                 <div>
                   <label htmlFor={`note-edit-${note.id}`} className="mb-2 block text-sm font-semibold text-primary">
-                    Note 수정 중
+                    {copy.item.editing}
                   </label>
                   <textarea
                     id={`note-edit-${note.id}`}
@@ -152,19 +144,19 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
                       type="button"
                       onClick={() => handleSaveEdit(note.id)}
                       disabled={pending}
-                      aria-label="Note 수정 내용 저장"
+                      aria-label={copy.item.saveChangesLabel}
                       className="min-h-12 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-80"
                     >
-                      {isPending ? "저장 중…" : "변경 저장"}
+                      {isPending ? dictionary.common.pending.saving : copy.item.saveChanges}
                     </button>
                     <button
                       type="button"
                       onClick={handleCancelEdit}
                       disabled={pending}
-                      aria-label="Note 수정 취소"
+                      aria-label={copy.item.cancelEditLabel}
                       className="min-h-12 rounded-xl border border-border bg-surface-muted px-4 py-2 text-sm font-medium text-text-secondary disabled:opacity-80"
                     >
-                      취소
+                      {dictionary.common.actions.cancel}
                     </button>
                   </div>
                 </div>
@@ -185,19 +177,19 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
                       type="button"
                       onClick={() => handleEdit(note)}
                       disabled={pending}
-                      aria-label="Note 수정"
+                      aria-label={copy.item.editLabel}
                       className="min-h-11 rounded-lg bg-primary-soft px-4 py-2 text-sm font-medium text-primary disabled:opacity-80"
                     >
-                      수정
+                      {dictionary.common.actions.edit}
                     </button>
                     <button
                       type="button"
                       onClick={() => handleDelete(note.id)}
                       disabled={pending}
-                      aria-label="Note 삭제"
+                      aria-label={copy.item.deleteLabel}
                       className="min-h-11 rounded-lg px-4 py-2 text-sm font-medium text-danger disabled:opacity-80"
                     >
-                      삭제
+                      {dictionary.common.actions.delete}
                     </button>
                   </div>
                 </article>

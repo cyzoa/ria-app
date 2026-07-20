@@ -3,28 +3,12 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { updateSpeechStyle } from "@/lib/actions/settings";
+import { formatMessage, getDictionary } from "@/locales";
 import type { SpeechStyle } from "@/types/database";
 
 interface Props {
   currentStyle: SpeechStyle | null;
 }
-
-const styleOptions: Array<{
-  value: SpeechStyle;
-  label: string;
-  example: string;
-}> = [
-  {
-    value: "formal",
-    label: "존댓말",
-    example: "오늘도 함께 살펴볼까요?",
-  },
-  {
-    value: "casual",
-    label: "편한 말투",
-    example: "오늘도 같이 살펴볼까?",
-  },
-];
 
 export function SpeechStyleToggle({ currentStyle }: Props) {
   const [activeStyle, setActiveStyle] = useState<SpeechStyle | null>(currentStyle);
@@ -35,6 +19,26 @@ export function SpeechStyleToggle({ currentStyle }: Props) {
   const [pending, startTransition] = useTransition();
   const mutationRef = useRef(false);
   const router = useRouter();
+  const copy = getDictionary().settings.speechStyle;
+  const styleOptions: Array<{
+    value: SpeechStyle;
+    label: string;
+    accessibleLabel: string;
+    example: string;
+  }> = [
+    {
+      value: "formal",
+      label: copy.formalLabel,
+      accessibleLabel: copy.formalAccessibleLabel,
+      example: copy.formalExample,
+    },
+    {
+      value: "casual",
+      label: copy.casualLabel,
+      accessibleLabel: copy.casualAccessibleLabel,
+      example: copy.casualExample,
+    },
+  ];
 
   useEffect(() => {
     setActiveStyle(currentStyle);
@@ -60,7 +64,7 @@ export function SpeechStyleToggle({ currentStyle }: Props) {
 
         setMessage({
           type: "success",
-          text: style === "casual" ? "말투를 저장했어." : "말투를 저장했어요.",
+          text: copy.saved[style],
         });
         router.refresh();
       } finally {
@@ -75,22 +79,18 @@ export function SpeechStyleToggle({ currentStyle }: Props) {
     <section aria-labelledby="speech-style-heading" className="rounded-2xl bg-surface p-4 sm:p-5">
       <div className="mb-5">
         <h2 id="speech-style-heading" className="text-lg font-semibold text-text-primary">
-          말투 설정
+          {copy.title}
         </h2>
         <p className="mt-1 text-sm leading-5 text-text-secondary">
-          {selectedStyle === "casual"
-            ? "편안하게 느껴지는 말투를 골라봐."
-            : "편안하게 느껴지는 말투를 선택하세요."}
+          {copy.description[selectedStyle]}
         </p>
       </div>
 
       <fieldset aria-busy={pending}>
-        <legend className="sr-only">RIA 말투 선택</legend>
+        <legend className="sr-only">{copy.legend}</legend>
         <div className="grid gap-3 sm:grid-cols-2">
           {styleOptions.map((option) => {
             const selected = selectedStyle === option.value;
-            const accessibleLabel =
-              option.value === "formal" ? "존댓말 말투" : "편한 말투";
 
             return (
               <button
@@ -99,7 +99,10 @@ export function SpeechStyleToggle({ currentStyle }: Props) {
                 onClick={() => handleToggle(option.value)}
                 disabled={pending}
                 aria-pressed={selected}
-                aria-label={`${accessibleLabel} ${selected ? "선택됨" : "선택"}`}
+                aria-label={formatMessage(copy.optionLabel, {
+                  label: option.accessibleLabel,
+                  state: selected ? copy.selected : copy.select,
+                })}
                 className={`min-h-24 rounded-2xl border px-4 py-4 text-left transition-colors disabled:opacity-80 ${
                   selected
                     ? "border-primary bg-primary-soft"
@@ -110,7 +113,7 @@ export function SpeechStyleToggle({ currentStyle }: Props) {
                   <span className="text-base font-semibold text-text-primary">{option.label}</span>
                   {selected && (
                     <span className="shrink-0 text-sm font-medium text-primary">
-                      <span aria-hidden="true">✓ </span>선택됨
+                      <span aria-hidden="true">✓ </span>{copy.selected}
                     </span>
                   )}
                 </span>
@@ -125,7 +128,7 @@ export function SpeechStyleToggle({ currentStyle }: Props) {
 
       {pending && (
         <p role="status" className="mt-4 text-sm text-text-secondary">
-          {selectedStyle === "casual" ? "말투를 저장하고 있어…" : "말투를 저장하고 있어요…"}
+          {copy.saving[selectedStyle]}
         </p>
       )}
       {message?.type === "success" && !pending && (

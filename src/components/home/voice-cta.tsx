@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { getDictionary } from "@/locales";
 import type { SpeechStyle } from "@/types/database";
 
 export function VoiceCta({ speechStyle }: { speechStyle: SpeechStyle }) {
   const [isListening, setIsListening] = useState(false);
+  const copy = getDictionary().appShell.voice;
 
   function handleClick() {
     setIsListening(true);
@@ -16,7 +18,7 @@ export function VoiceCta({ speechStyle }: { speechStyle: SpeechStyle }) {
     <button
       onClick={handleClick}
       disabled={isListening}
-      aria-label={isListening ? "RIA 음성 입력 듣는 중" : "RIA 음성 입력 열기"}
+      aria-label={isListening ? copy.listeningLabel : copy.openLabel}
       className={`relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full transition-all duration-300 ${
         isListening
           ? "bg-gold scale-110 animate-pulse"
@@ -30,7 +32,7 @@ export function VoiceCta({ speechStyle }: { speechStyle: SpeechStyle }) {
       />
       {isListening && (
         <span className="absolute inset-0 flex items-center justify-center bg-black/25 text-[10px] font-medium text-card-white">
-          {speechStyle === "casual" ? "듣고 있어" : "듣고 있어요"}
+          {copy.listening[speechStyle]}
         </span>
       )}
     </button>
