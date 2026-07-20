@@ -4,8 +4,15 @@ import { usePathname } from "next/navigation";
 import { BottomNav } from "@/components/layout/bottom-nav";
 import { LogoutButton } from "@/components/home/logout-button";
 import { VoiceCta } from "@/components/home/voice-cta";
+import type { SpeechStyle } from "@/types/database";
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({
+  children,
+  speechStyle,
+}: {
+  children: React.ReactNode;
+  speechStyle: SpeechStyle;
+}) {
   const pathname = usePathname();
   const hideNav = pathname === "/" || pathname === "/login";
 
@@ -16,8 +23,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       >
         {!hideNav && (
           <div className="app-shell-header flex items-center justify-between px-5 sm:px-6">
-            <LogoutButton />
-            <VoiceCta />
+            <LogoutButton speechStyle={speechStyle} />
+            <VoiceCta speechStyle={speechStyle} />
           </div>
         )}
         {children}

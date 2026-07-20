@@ -12,8 +12,8 @@ export default async function TasksPage() {
         <h1 className="text-[2rem] font-semibold tracking-[-0.035em] text-text-primary">
           Tasks
         </h1>
-        <p className="mt-2 max-w-md text-[15px] leading-6 text-text-secondary">
-          지금 중요한 일부터 차분히 살펴보세요.
+        <p className="mt-2 max-w-md text-base leading-7 text-text-secondary">
+          지금 중요한 일부터 차분히 살펴보기
         </p>
       </header>
       <TaskList tasks={data.tasks} projects={data.projects} />

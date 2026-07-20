@@ -2,8 +2,9 @@
 
 import { useRef, useState, useTransition } from "react";
 import { createInboxItem } from "@/lib/actions/inbox";
+import type { SpeechStyle } from "@/types/database";
 
-export function CreateInboxForm() {
+export function CreateInboxForm({ speechStyle }: { speechStyle: SpeechStyle }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -41,7 +42,11 @@ export function CreateInboxForm() {
         id="inbox-content"
         name="content"
         required
-        placeholder="잊기 전에 여기에 적어두세요"
+        placeholder={
+          speechStyle === "casual"
+            ? "잊기 전에 여기에 적어둬"
+            : "잊기 전에 여기에 적어두세요"
+        }
         className="min-h-32 w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-base leading-6 text-text-primary placeholder:text-text-secondary/75"
         rows={4}
       />

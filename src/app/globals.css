@@ -78,6 +78,10 @@
   --app-bottom-nav-height: 5.5rem;
 }
 
+html:has(.app-shell-content) {
+  scrollbar-gutter: stable;
+}
+
 .app-shell-header {
   padding-top: max(3rem, calc(env(safe-area-inset-top) + 1.5rem));
 }

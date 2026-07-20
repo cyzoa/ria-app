@@ -2,8 +2,9 @@
 
 import { useRef, useState, useTransition } from "react";
 import { createProject } from "@/lib/actions/projects";
+import type { SpeechStyle } from "@/types/database";
 
-export function CreateProjectForm() {
+export function CreateProjectForm({ speechStyle }: { speechStyle: SpeechStyle }) {
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
@@ -76,7 +77,9 @@ export function CreateProjectForm() {
             className="h-12 w-12 shrink-0 rounded-xl border border-border bg-surface p-1"
           />
           <p className="min-w-0 text-sm leading-5 text-text-secondary">
-            이름과 함께 Project를 구분하는 보조 색상이에요.
+            {speechStyle === "casual"
+              ? "이름과 함께 Project를 구분하는 보조 색상이야."
+              : "이름과 함께 Project를 구분하는 보조 색상이에요."}
           </p>
         </div>
       </div>

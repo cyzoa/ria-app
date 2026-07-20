@@ -17,8 +17,14 @@ interface Props {
 }
 
 const emptyMessages = {
-  formal: "지금 내려놓을 생각이 생기면 여기에 적어두세요.",
-  casual: "지금 내려놓을 생각이 생기면 여기에 적어둬.",
+  formal: {
+    empty: "지금 내려놓을 생각이 생기면 여기에 적어두세요.",
+    description: "정리가 필요할 때 천천히 살펴보세요.",
+  },
+  casual: {
+    empty: "지금 내려놓을 생각이 생기면 여기에 적어둬.",
+    description: "정리가 필요할 때 천천히 살펴봐.",
+  },
 };
 
 export function InboxList({ items, speechStyle = "formal" }: Props) {
@@ -62,7 +68,7 @@ export function InboxList({ items, speechStyle = "formal" }: Props) {
         </h2>
         <div className="mt-4 rounded-2xl bg-surface-muted px-5 py-6">
           <p className="text-base leading-7 text-text-secondary">
-            {emptyMessages[speechStyle]}
+            {emptyMessages[speechStyle].empty}
           </p>
         </div>
       </section>
@@ -76,7 +82,9 @@ export function InboxList({ items, speechStyle = "formal" }: Props) {
           <h2 id="inbox-items-heading" className="text-lg font-semibold text-text-primary">
             기록된 생각
           </h2>
-          <p className="mt-1 text-sm text-text-secondary">정리가 필요할 때 천천히 살펴보세요.</p>
+          <p className="mt-1 text-sm leading-5 text-text-secondary">
+            {emptyMessages[speechStyle].description}
+          </p>
         </div>
         <span
           className="shrink-0 text-sm tabular-nums text-text-secondary"
@@ -100,6 +108,7 @@ export function InboxList({ items, speechStyle = "formal" }: Props) {
                   type="button"
                   onClick={() => handleConvert(item.id)}
                   disabled={pending}
+                  aria-label="Inbox 항목을 Task로 옮기기"
                   className="min-h-11 rounded-lg bg-primary-soft px-4 py-2 text-sm font-medium text-primary disabled:opacity-80"
                 >
                   {isPending ? "처리 중…" : "Task로 옮기기"}
@@ -108,6 +117,7 @@ export function InboxList({ items, speechStyle = "formal" }: Props) {
                   type="button"
                   onClick={() => handleDelete(item.id)}
                   disabled={pending}
+                  aria-label="Inbox 항목 삭제"
                   className="min-h-11 rounded-lg px-4 py-2 text-sm font-medium text-danger disabled:opacity-80"
                 >
                   삭제

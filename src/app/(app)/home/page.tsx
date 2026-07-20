@@ -24,8 +24,14 @@ export default async function HomePage() {
 
   const shouldShowRiaMessage = hasSchedule && isAfternoonHeavy;
   const riaMessage = shouldShowRiaMessage
-    ? "오늘은 오후 일정이 조금 무거워 보여요. 오전에는 중요한 것 하나만 먼저 끝내볼까요?"
+    ? speechStyle === "casual"
+      ? "오늘은 오후 일정이 조금 무거워 보여. 오전에는 중요한 것 하나만 먼저 끝내볼까?"
+      : "오늘은 오후 일정이 조금 무거워 보여요. 오전에는 중요한 것 하나만 먼저 끝내볼까요?"
     : "";
+  const quickCaptureDescription =
+    speechStyle === "casual"
+      ? "Inbox에 편하게 남겨둘 수 있어."
+      : "Inbox에 편하게 남겨둘 수 있어요.";
 
   return (
     <div className="fade-in px-5 pb-10 sm:px-6">
@@ -51,11 +57,11 @@ export default async function HomePage() {
           className="flex min-h-14 w-full items-center justify-between gap-4 rounded-2xl bg-surface-muted px-4 py-3 transition-colors hover:bg-primary-soft"
         >
           <span className="min-w-0">
-            <span className="block break-words text-[15px] font-medium text-text-primary">
+            <span className="block break-words text-base font-medium leading-6 text-text-primary">
               떠오른 생각을 잠시 내려놓기
             </span>
             <span className="mt-0.5 block break-words text-sm leading-relaxed text-text-secondary">
-              Inbox에 편하게 남겨둘 수 있어요.
+              {quickCaptureDescription}
             </span>
           </span>
           <span aria-hidden="true" className="shrink-0 text-sm font-semibold text-primary">
@@ -64,7 +70,7 @@ export default async function HomePage() {
         </Link>
       </section>
 
-      {shouldShowRiaMessage && <RiaMessage message={riaMessage} />}
+      {shouldShowRiaMessage && <RiaMessage message={riaMessage} speechStyle={speechStyle} />}
     </div>
   );
 }

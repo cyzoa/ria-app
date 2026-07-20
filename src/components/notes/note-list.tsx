@@ -16,8 +16,14 @@ interface Props {
 }
 
 const emptyMessages = {
-  formal: "아직 기록된 Note가 없어요. 오래 두고 싶은 생각이 생기면 남겨보세요.",
-  casual: "아직 기록된 Note가 없어. 오래 두고 싶은 생각이 생기면 남겨봐.",
+  formal: {
+    empty: "아직 기록된 Note가 없어요. 오래 두고 싶은 생각이 생기면 남겨보세요.",
+    description: "최근에 남긴 생각부터 보여드려요.",
+  },
+  casual: {
+    empty: "아직 기록된 Note가 없어. 오래 두고 싶은 생각이 생기면 남겨봐.",
+    description: "최근에 남긴 생각부터 보여줄게.",
+  },
 };
 
 export function NoteList({ notes, speechStyle = "formal" }: Props) {
@@ -92,7 +98,7 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
         </h2>
         <div className="mt-4 rounded-2xl bg-surface-muted px-5 py-6">
           <p className="text-base leading-7 text-text-secondary">
-            {emptyMessages[speechStyle]}
+            {emptyMessages[speechStyle].empty}
           </p>
         </div>
       </section>
@@ -106,7 +112,9 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
           <h2 id="note-list-heading" className="text-lg font-semibold text-text-primary">
             최근 Note
           </h2>
-          <p className="mt-1 text-sm text-text-secondary">최근에 남긴 생각부터 보여드려요.</p>
+          <p className="mt-1 text-sm leading-5 text-text-secondary">
+            {emptyMessages[speechStyle].description}
+          </p>
         </div>
         <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={`${notes.length}개`}>
           {notes.length}
@@ -144,6 +152,7 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
                       type="button"
                       onClick={() => handleSaveEdit(note.id)}
                       disabled={pending}
+                      aria-label="Note 수정 내용 저장"
                       className="min-h-12 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-80"
                     >
                       {isPending ? "저장 중…" : "변경 저장"}
@@ -152,6 +161,7 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
                       type="button"
                       onClick={handleCancelEdit}
                       disabled={pending}
+                      aria-label="Note 수정 취소"
                       className="min-h-12 rounded-xl border border-border bg-surface-muted px-4 py-2 text-sm font-medium text-text-secondary disabled:opacity-80"
                     >
                       취소
@@ -175,6 +185,7 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
                       type="button"
                       onClick={() => handleEdit(note)}
                       disabled={pending}
+                      aria-label="Note 수정"
                       className="min-h-11 rounded-lg bg-primary-soft px-4 py-2 text-sm font-medium text-primary disabled:opacity-80"
                     >
                       수정
@@ -183,6 +194,7 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
                       type="button"
                       onClick={() => handleDelete(note.id)}
                       disabled={pending}
+                      aria-label="Note 삭제"
                       className="min-h-11 rounded-lg px-4 py-2 text-sm font-medium text-danger disabled:opacity-80"
                     >
                       삭제

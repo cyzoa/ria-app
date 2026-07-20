@@ -11,10 +11,14 @@ interface Props {
 
 const emptyMessages = {
   formal: {
+    description: "시간의 흐름을 한 번만 가볍게 살펴보세요.",
     empty: "오늘은 일정이 비어 있어요.\n느긋하게 보낼 수 있는 하루네요.",
+    add: "일정이 필요하면 추가해보세요",
   },
   casual: {
+    description: "시간의 흐름을 한 번만 가볍게 살펴봐.",
     empty: "오늘은 일정이 비어 있어.\n느긋하게 보낼 수 있는 하루네.",
+    add: "일정이 필요하면 추가해봐",
   },
 };
 
@@ -36,7 +40,7 @@ export function ScheduleSection({ tasks, speechStyle = "formal" }: Props) {
           다음 일정
         </h2>
         <p className="mt-1 text-sm leading-relaxed text-text-secondary">
-          시간의 흐름을 한 번만 가볍게 살펴봐요.
+          {emptyMessages[speechStyle].description}
         </p>
       </div>
 
@@ -48,7 +52,9 @@ export function ScheduleSection({ tasks, speechStyle = "formal" }: Props) {
           <p className="whitespace-pre-line break-words text-base leading-relaxed text-text-secondary">
             {emptyMessages[speechStyle].empty}
           </p>
-          <p className="mt-2 text-sm font-medium text-primary">일정이 필요하면 추가하기</p>
+          <p className="mt-2 text-sm font-medium text-primary">
+            {emptyMessages[speechStyle].add}
+          </p>
         </button>
       ) : (
         <div>

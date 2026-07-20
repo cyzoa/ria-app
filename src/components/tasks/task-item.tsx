@@ -115,7 +115,7 @@ export function TaskItem({ task, projects, emphasis = false }: Props) {
         </label>
 
         <label className="min-w-0 text-xs font-medium text-text-secondary">
-          <span className="mb-1 block">프로젝트</span>
+          <span className="mb-1 block">Project</span>
           <select
             value={task.project_id ?? ""}
             disabled={pending}
@@ -124,7 +124,7 @@ export function TaskItem({ task, projects, emphasis = false }: Props) {
             }
             className="min-h-11 w-full rounded-lg border border-border bg-surface px-3 py-2 text-base text-text-primary disabled:opacity-80"
           >
-            <option value="">프로젝트 없음</option>
+            <option value="">Project 없음</option>
             {projects.map((candidate) => (
               <option key={candidate.id} value={candidate.id}>
                 {candidate.name}
@@ -139,6 +139,7 @@ export function TaskItem({ task, projects, emphasis = false }: Props) {
           type="button"
           disabled={pending}
           onClick={() => run(() => setTaskTop3(task.id, !task.is_top3))}
+          aria-label={`${task.title} Task를 ${task.is_top3 ? "Top 3에서 빼기" : "Top 3에 두기"}`}
           className="min-h-11 rounded-lg bg-primary-soft px-3 py-2 text-sm font-medium text-primary disabled:opacity-80"
         >
           {task.is_top3 ? "Top 3에서 빼기" : "Top 3에 두기"}
@@ -148,6 +149,7 @@ export function TaskItem({ task, projects, emphasis = false }: Props) {
           type="button"
           disabled={pending}
           onClick={() => run(() => archiveTask(task.id))}
+          aria-label={`${task.title} Task 보관`}
           className="min-h-11 rounded-lg border border-border bg-surface px-3 py-2 text-sm font-medium text-text-secondary disabled:opacity-80"
         >
           보관
@@ -157,6 +159,7 @@ export function TaskItem({ task, projects, emphasis = false }: Props) {
           type="button"
           disabled={pending}
           onClick={() => run(() => deleteTask(task.id))}
+          aria-label={`${task.title} Task 삭제`}
           className="min-h-11 rounded-lg px-3 py-2 text-sm font-medium text-danger disabled:opacity-80"
         >
           삭제

@@ -62,7 +62,7 @@ export function CreateTaskForm({ projects }: Props) {
           name="title"
           required
           autoFocus
-          placeholder="지금 해둘 일을 적어보세요"
+          placeholder="지금 해둘 Task 입력"
           className="min-h-12 w-full rounded-xl border border-border bg-surface px-3 py-2 text-base text-text-primary placeholder:text-text-secondary/75"
         />
       </div>
@@ -86,7 +86,7 @@ export function CreateTaskForm({ projects }: Props) {
 
         <div>
           <label htmlFor="task-project" className="mb-2 block text-sm font-medium text-text-primary">
-            프로젝트
+            Project
           </label>
           <select
             id="task-project"
@@ -94,7 +94,7 @@ export function CreateTaskForm({ projects }: Props) {
             defaultValue=""
             className="min-h-12 w-full rounded-xl border border-border bg-surface px-3 py-2 text-base text-text-primary"
           >
-            <option value="">프로젝트 없음</option>
+            <option value="">Project 없음</option>
             {projects.map((project) => (
               <option key={project.id} value={project.id}>
                 {project.name}

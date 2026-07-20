@@ -14,9 +14,11 @@ interface Props {
 
 const emptyMessages = {
   formal: {
+    description: "가장 의미 있는 일부터 하나씩 이어가세요.",
     empty: "오늘 할 일을 아직 안 정했어요.\n떠오르는 것부터 하나 적어볼까요?",
   },
   casual: {
+    description: "가장 의미 있는 일부터 하나씩 이어가.",
     empty: "오늘 할 일을 아직 안 정했어.\n떠오르는 것부터 하나 적어볼까?",
   },
 };
@@ -38,7 +40,7 @@ export function Top3Section({ tasks, speechStyle = "formal" }: Props) {
           지금 가능한 한 걸음
         </h2>
         <p className="mt-1 text-sm leading-relaxed text-text-secondary">
-          가장 의미 있는 일부터 하나씩 이어가요.
+          {emptyMessages[speechStyle].description}
         </p>
       </div>
 

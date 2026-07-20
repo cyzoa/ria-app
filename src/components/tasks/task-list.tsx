@@ -39,8 +39,8 @@ export function TaskList({ tasks, projects }: Props) {
         <div className="rounded-2xl bg-surface-muted px-5 py-6">
           <p className="text-base leading-7 text-text-secondary">
             {filtersActive
-              ? "선택한 조건에 맞는 Task가 없어요. 보기 조건을 바꿔보세요."
-              : "아직 Task가 없어요. 떠오른 다음 한 걸음부터 가볍게 적어보세요."}
+              ? "선택한 조건에 맞는 Task 없음. 보기 조건 다시 선택."
+              : "아직 등록된 Task 없음. 떠오른 다음 한 걸음부터 가볍게 기록."}
           </p>
         </div>
       ) : (
@@ -58,7 +58,7 @@ export function TaskList({ tasks, projects }: Props) {
           {activeTasks.length > 0 && (
             <TaskSection
               title="진행 중인 작업"
-              description="필요한 순간에 하나씩 이어가세요"
+              description="필요한 순간에 하나씩 이어가기"
               tasks={activeTasks}
               projects={projects}
             />
@@ -67,7 +67,7 @@ export function TaskList({ tasks, projects }: Props) {
           {completedTasks.length > 0 && (
             <TaskSection
               title="완료한 작업"
-              description="필요하면 다시 미완료로 돌릴 수 있어요"
+              description="필요하면 다시 미완료로 변경 가능"
               tasks={completedTasks}
               projects={projects}
               quiet
@@ -81,7 +81,7 @@ export function TaskList({ tasks, projects }: Props) {
           <h2 id="task-filter-heading" className="text-base font-semibold text-text-primary">
             보기 조정
           </h2>
-          <p className="mt-1 text-sm text-text-secondary">상태나 프로젝트로 목록을 좁혀보세요.</p>
+          <p className="mt-1 text-sm text-text-secondary">상태나 Project로 목록 좁히기</p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2">
@@ -104,7 +104,7 @@ export function TaskList({ tasks, projects }: Props) {
 
           <div>
             <label htmlFor="task-project-filter" className="mb-2 block text-sm font-medium text-text-primary">
-              프로젝트
+              Project
             </label>
             <select
               id="task-project-filter"
@@ -112,7 +112,7 @@ export function TaskList({ tasks, projects }: Props) {
               onChange={(event) => setProjectFilter(event.target.value)}
               className="min-h-12 w-full rounded-xl border border-border bg-surface px-3 py-2 text-base text-text-primary"
             >
-              <option value="all">모든 프로젝트</option>
+              <option value="all">모든 Project</option>
               {projects.map((project) => (
                 <option key={project.id} value={project.id}>
                   {project.name}

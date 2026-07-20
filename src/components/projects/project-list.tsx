@@ -17,8 +17,14 @@ interface Props {
 }
 
 const emptyMessages = {
-  formal: "아직 만든 Project가 없어요. 필요할 때 새로운 방향을 묶어보세요.",
-  casual: "아직 만든 Project가 없어. 필요할 때 새로운 방향을 묶어봐.",
+  formal: {
+    empty: "아직 만든 Project가 없어요. 필요할 때 새로운 방향을 묶어보세요.",
+    description: "작업이 묶인 방향을 한눈에 살펴보세요.",
+  },
+  casual: {
+    empty: "아직 만든 Project가 없어. 필요할 때 새로운 방향을 묶어봐.",
+    description: "작업이 묶인 방향을 한눈에 살펴봐.",
+  },
 };
 
 export function ProjectList({ projects, speechStyle = "formal" }: Props) {
@@ -55,7 +61,7 @@ export function ProjectList({ projects, speechStyle = "formal" }: Props) {
         </h2>
         <div className="mt-4 rounded-2xl bg-surface-muted px-5 py-6">
           <p className="text-base leading-7 text-text-secondary">
-            {emptyMessages[speechStyle]}
+            {emptyMessages[speechStyle].empty}
           </p>
         </div>
       </section>
@@ -69,7 +75,9 @@ export function ProjectList({ projects, speechStyle = "formal" }: Props) {
           <h2 id="project-list-heading" className="text-lg font-semibold text-text-primary">
             현재 Project
           </h2>
-          <p className="mt-1 text-sm text-text-secondary">작업이 묶인 방향을 한눈에 살펴보세요.</p>
+          <p className="mt-1 text-sm leading-5 text-text-secondary">
+            {emptyMessages[speechStyle].description}
+          </p>
         </div>
         <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={`${projects.length}개`}>
           {projects.length}

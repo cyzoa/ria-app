@@ -21,7 +21,7 @@ const styleOptions: Array<{
   },
   {
     value: "casual",
-    label: "반말",
+    label: "편한 말투",
     example: "오늘도 같이 살펴볼까?",
   },
 ];
@@ -58,7 +58,10 @@ export function SpeechStyleToggle({ currentStyle }: Props) {
           return;
         }
 
-        setMessage({ type: "success", text: "말투를 저장했어요." });
+        setMessage({
+          type: "success",
+          text: style === "casual" ? "말투를 저장했어." : "말투를 저장했어요.",
+        });
         router.refresh();
       } finally {
         mutationRef.current = false;
@@ -75,7 +78,9 @@ export function SpeechStyleToggle({ currentStyle }: Props) {
           말투 설정
         </h2>
         <p className="mt-1 text-sm leading-5 text-text-secondary">
-          편안하게 느껴지는 말투를 선택하세요.
+          {selectedStyle === "casual"
+            ? "편안하게 느껴지는 말투를 골라봐."
+            : "편안하게 느껴지는 말투를 선택하세요."}
         </p>
       </div>
 
@@ -84,6 +89,8 @@ export function SpeechStyleToggle({ currentStyle }: Props) {
         <div className="grid gap-3 sm:grid-cols-2">
           {styleOptions.map((option) => {
             const selected = selectedStyle === option.value;
+            const accessibleLabel =
+              option.value === "formal" ? "존댓말 말투" : "편한 말투";
 
             return (
               <button
@@ -92,6 +99,7 @@ export function SpeechStyleToggle({ currentStyle }: Props) {
                 onClick={() => handleToggle(option.value)}
                 disabled={pending}
                 aria-pressed={selected}
+                aria-label={`${accessibleLabel} ${selected ? "선택됨" : "선택"}`}
                 className={`min-h-24 rounded-2xl border px-4 py-4 text-left transition-colors disabled:opacity-80 ${
                   selected
                     ? "border-primary bg-primary-soft"
@@ -117,7 +125,7 @@ export function SpeechStyleToggle({ currentStyle }: Props) {
 
       {pending && (
         <p role="status" className="mt-4 text-sm text-text-secondary">
-          말투를 저장하고 있어요…
+          {selectedStyle === "casual" ? "말투를 저장하고 있어…" : "말투를 저장하고 있어요…"}
         </p>
       )}
       {message?.type === "success" && !pending && (

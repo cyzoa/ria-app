@@ -12,12 +12,16 @@ interface Props {
 
 const emptyMessages = {
   formal: {
+    description: "오늘을 이끌 한 가지를 천천히 정해보세요.",
     placeholder: "오늘 하나만 정한다면, 뭐가 제일 중요할까요?",
     empty: "오늘의 방향이 아직 없어요.\n가장 중요한 것 하나만 정해볼까요?",
+    review: "눌러서 다시 살펴보세요",
   },
   casual: {
+    description: "오늘을 이끌 한 가지를 천천히 정해봐.",
     placeholder: "오늘 하나만 정한다면, 뭐가 제일 중요할까?",
     empty: "오늘의 방향이 아직 없어.\n가장 중요한 것 하나만 정해볼까?",
+    review: "눌러서 다시 살펴봐",
   },
 };
 
@@ -42,7 +46,7 @@ export function NorthStarSection({ northStar, speechStyle = "formal" }: Props) {
           오늘의 방향
         </h2>
         <p className="mt-1 text-sm leading-relaxed text-text-secondary">
-          오늘을 이끌 한 가지를 천천히 정해보세요.
+          {messages.description}
         </p>
       </div>
       <div className="rounded-[20px] bg-primary-soft p-5 sm:p-6">
@@ -85,7 +89,7 @@ export function NorthStarSection({ northStar, speechStyle = "formal" }: Props) {
             <p className="break-words text-[21px] font-medium leading-relaxed tracking-[-0.02em] text-text-primary [overflow-wrap:anywhere]">
               {northStar.title}
             </p>
-            <p className="mt-2 text-sm text-text-secondary">눌러서 다시 살펴보기</p>
+            <p className="mt-2 text-sm text-text-secondary">{messages.review}</p>
           </button>
         ) : (
           <button onClick={() => setEditing(true)} className="w-full rounded-xl text-left">

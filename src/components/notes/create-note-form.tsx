@@ -2,8 +2,9 @@
 
 import { useRef, useState, useTransition } from "react";
 import { createNote } from "@/lib/actions/notes";
+import type { SpeechStyle } from "@/types/database";
 
-export function CreateNoteForm() {
+export function CreateNoteForm({ speechStyle }: { speechStyle: SpeechStyle }) {
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -42,7 +43,11 @@ export function CreateNoteForm() {
         id="note-content"
         name="content"
         required
-        placeholder="오래 남겨두고 싶은 생각을 적어보세요"
+        placeholder={
+          speechStyle === "casual"
+            ? "오래 남겨두고 싶은 생각을 적어봐"
+            : "오래 남겨두고 싶은 생각을 적어보세요"
+        }
         className="min-h-40 w-full resize-y rounded-xl border border-border bg-surface px-4 py-3 text-base leading-7 text-text-primary placeholder:text-text-secondary/75"
         rows={6}
       />

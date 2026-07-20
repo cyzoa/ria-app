@@ -574,3 +574,31 @@ Project 삭제 시 연결된 Task가 어떻게 처리되는지는 기존 DB fore
 - 새 profile 필드 없음
 - 커밋하지 않음
 
+## 15. Phase F 최종 마감 확인
+
+2026-07-20 인증된 실제 계정으로 다음 항목을 추가 확인했다.
+
+- Project 삭제 후 연결된 Task가 유지된다.
+- 유지된 Task는 Project 선택에서 `Project 없음` 상태로 표시된다.
+- 이 삭제 동작은 현재 제품 동작으로 승인됐으며 데이터 로직을 변경하지 않았다.
+- Settings에서 `formal`과 `casual` 전환이 실제 Supabase에 저장된다.
+- 새로고침 후 선택한 말투가 유지된다.
+- Home 인사와 안내에 선택한 말투가 반영된다.
+- 실제 모바일 기기의 가상 키보드 회피 동작은 아직 검증하지 못했다.
+
+Next.js 개발 표시기가 모바일 BottomNav의 Today 영역을 가리던 문제는
+`next.config.ts`의 기존 `reactStrictMode` 설정을 보존한 채 다음 설정만 추가해 해결했다.
+
+```ts
+devIndicators: {
+  position: "top-right",
+}
+```
+
+개발 서버를 재시작한 뒤 다음을 확인했다.
+
+- 360×800: 검은색 N 표시기가 오른쪽 위에 표시됨
+- 412×800: 표시기 위치 `top: 22px`, `right: 약 37px`, 크기 32×32px
+- 두 화면에서 Today 버튼이 완전히 보이고 활성화됨
+- 360px에서 Today 링크 실제 클릭 성공
+- production UI 코드 및 package 파일 변경 없음
