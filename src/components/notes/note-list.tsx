@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { updateNote, deleteNote } from "@/lib/actions/notes";
-import { useDictionary } from "@/components/providers/locale-provider";
+import { useDictionary, useLocale } from "@/components/providers/locale-provider";
 import { formatCountMessage } from "@/locales/types";
 import type { SpeechStyle } from "@/types/database";
 
@@ -25,6 +25,7 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
   const [error, setError] = useState<string | null>(null);
   const mutationRef = useRef(false);
   const dictionary = useDictionary();
+  const { locale } = useLocale();
   const copy = dictionary.notes;
 
   function handleDelete(noteId: string) {
@@ -109,7 +110,7 @@ export function NoteList({ notes, speechStyle = "formal" }: Props) {
             {copy.list.description[speechStyle]}
           </p>
         </div>
-        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={formatCountMessage(dictionary.accessibility.itemCount, notes.length)}>
+        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={formatCountMessage(dictionary.accessibility.itemCount, notes.length, locale)}>
           {notes.length}
         </span>
       </div>

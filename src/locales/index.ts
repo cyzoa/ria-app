@@ -1,13 +1,21 @@
+import { de } from "@/locales/de";
 import { DEFAULT_LOCALE, resolveLocale, type SupportedLocale } from "@/locales/config";
 import { en } from "@/locales/en";
+import { es } from "@/locales/es";
+import { fr } from "@/locales/fr";
 import { ja } from "@/locales/ja";
 import { ko } from "@/locales/ko";
+import { ru } from "@/locales/ru";
 import type { Dictionary } from "@/locales/schema";
 
 const dictionaries = {
   ko,
   en,
   ja,
+  es,
+  fr,
+  de,
+  ru,
 } satisfies Record<SupportedLocale, Dictionary>;
 
 export function getDictionary(locale: SupportedLocale = DEFAULT_LOCALE): Dictionary {

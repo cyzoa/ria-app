@@ -18,6 +18,8 @@ export const ja = {
     },
     count: {
       one: "{count}件",
+      few: "{count}件",
+      many: "{count}件",
       other: "{count}件",
     },
   },
@@ -323,6 +325,8 @@ export const ja = {
       },
       taskCount: {
         one: "関連するTask {count}件",
+        few: "関連するTask {count}件",
+        many: "関連するTask {count}件",
         other: "関連するTask {count}件",
       },
       deleteLabel: "Project「{name}」を削除",
@@ -384,6 +388,8 @@ export const ja = {
   accessibility: {
     itemCount: {
       one: "{count}件",
+      few: "{count}件",
+      many: "{count}件",
       other: "{count}件",
     },
   },

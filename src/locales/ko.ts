@@ -16,6 +16,8 @@ export const ko = {
     },
     count: {
       one: "{count}개",
+      few: "{count}개",
+      many: "{count}개",
       other: "{count}개",
     },
   },
@@ -321,6 +323,8 @@ export const ko = {
       },
       taskCount: {
         one: "연결된 Task {count}개",
+        few: "연결된 Task {count}개",
+        many: "연결된 Task {count}개",
         other: "연결된 Task {count}개",
       },
       deleteLabel: "{name} Project 삭제",
@@ -382,6 +386,8 @@ export const ko = {
   accessibility: {
     itemCount: {
       one: "{count}개",
+      few: "{count}개",
+      many: "{count}개",
       other: "{count}개",
     },
   },

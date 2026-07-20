@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { CreateTaskForm } from "./create-task-form";
 import { TaskItem } from "./task-item";
 import type { Project, Task, TaskStatus } from "@/types/database";
-import { useDictionary } from "@/components/providers/locale-provider";
+import { useDictionary, useLocale } from "@/components/providers/locale-provider";
 import { formatCountMessage } from "@/locales/types";
 
 interface Props {
@@ -149,6 +149,7 @@ function TaskSection({
 }: TaskSectionProps) {
   const sectionId = `task-section-${title.replaceAll(" ", "-")}`;
   const dictionary = useDictionary();
+  const { locale } = useLocale();
 
   return (
     <section aria-labelledby={sectionId} className={quiet ? "opacity-80" : undefined}>
@@ -166,7 +167,7 @@ function TaskSection({
           </h2>
           <p className="mt-1 text-sm leading-5 text-text-secondary">{description}</p>
         </div>
-        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={formatCountMessage(dictionary.accessibility.itemCount, tasks.length)}>
+        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={formatCountMessage(dictionary.accessibility.itemCount, tasks.length, locale)}>
           {tasks.length}
         </span>
       </div>

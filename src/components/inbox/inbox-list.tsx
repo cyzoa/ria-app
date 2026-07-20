@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { convertToTask, deleteInboxItem } from "@/lib/actions/inbox";
-import { useDictionary } from "@/components/providers/locale-provider";
+import { useDictionary, useLocale } from "@/components/providers/locale-provider";
 import { formatCountMessage } from "@/locales/types";
 import type { SpeechStyle } from "@/types/database";
 
@@ -51,6 +51,7 @@ export function InboxList({ items, speechStyle = "formal" }: Props) {
 
   const unconvertedItems = items.filter((item) => !item.converted_to_task);
   const dictionary = useDictionary();
+  const { locale } = useLocale();
   const copy = dictionary.inbox;
 
   if (unconvertedItems.length === 0) {
@@ -81,7 +82,7 @@ export function InboxList({ items, speechStyle = "formal" }: Props) {
         </div>
         <span
           className="shrink-0 text-sm tabular-nums text-text-secondary"
-          aria-label={formatCountMessage(dictionary.accessibility.itemCount, unconvertedItems.length)}
+          aria-label={formatCountMessage(dictionary.accessibility.itemCount, unconvertedItems.length, locale)}
         >
           {unconvertedItems.length}
         </span>

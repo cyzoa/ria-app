@@ -6,6 +6,8 @@ export type MessageVariables = Record<string, string | number>;
 
 export interface CountMessage {
   one: string;
+  few: string;
+  many: string;
   other: string;
 }
 
@@ -19,8 +21,18 @@ export function formatMessage(template: string, variables: MessageVariables): st
   );
 }
 
-export function formatCountMessage(message: CountMessage, count: number): string {
-  return formatMessage(count === 1 ? message.one : message.other, { count });
+export function formatCountMessage(
+  message: CountMessage,
+  count: number,
+  intlLocale = "ko-KR"
+): string {
+  const category = new Intl.PluralRules(intlLocale).select(count);
+  const template =
+    category === "one" || category === "few" || category === "many"
+      ? message[category]
+      : message.other;
+
+  return formatMessage(template, { count });
 }
 
 export type WidenDictionary<T> = T extends string

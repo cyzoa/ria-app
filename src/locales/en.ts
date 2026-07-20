@@ -18,6 +18,8 @@ export const en = {
     },
     count: {
       one: "{count} item",
+      few: "{count} items",
+      many: "{count} items",
       other: "{count} items",
     },
   },
@@ -325,6 +327,8 @@ export const en = {
       },
       taskCount: {
         one: "{count} linked Task",
+        few: "{count} linked Tasks",
+        many: "{count} linked Tasks",
         other: "{count} linked Tasks",
       },
       deleteLabel: "Delete Project {name}",
@@ -386,6 +390,8 @@ export const en = {
   accessibility: {
     itemCount: {
       one: "{count} item",
+      few: "{count} items",
+      many: "{count} items",
       other: "{count} items",
     },
   },

@@ -2,7 +2,7 @@
 
 import { useRef, useState, useTransition } from "react";
 import { deleteProject } from "@/lib/actions/projects";
-import { useDictionary } from "@/components/providers/locale-provider";
+import { useDictionary, useLocale } from "@/components/providers/locale-provider";
 import { formatCountMessage, formatMessage } from "@/locales/types";
 import type { SpeechStyle } from "@/types/database";
 
@@ -24,6 +24,7 @@ export function ProjectList({ projects, speechStyle = "formal" }: Props) {
   const [error, setError] = useState<string | null>(null);
   const mutationRef = useRef(false);
   const dictionary = useDictionary();
+  const { locale } = useLocale();
   const copy = dictionary.projects;
 
   function handleDelete(projectId: string) {
@@ -72,7 +73,7 @@ export function ProjectList({ projects, speechStyle = "formal" }: Props) {
             {copy.list.description[speechStyle]}
           </p>
         </div>
-        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={formatCountMessage(dictionary.accessibility.itemCount, projects.length)}>
+        <span className="shrink-0 text-sm tabular-nums text-text-secondary" aria-label={formatCountMessage(dictionary.accessibility.itemCount, projects.length, locale)}>
           {projects.length}
         </span>
       </div>
@@ -97,7 +98,7 @@ export function ProjectList({ projects, speechStyle = "formal" }: Props) {
                   {project.name}
                 </h3>
                 <p className="mt-1 text-sm text-text-secondary">
-                  {formatCountMessage(copy.list.taskCount, project.taskCount)}
+                  {formatCountMessage(copy.list.taskCount, project.taskCount, locale)}
                 </p>
                 {error && activeProjectId === project.id && (
                   <p role="alert" className="mt-3 text-sm leading-5 text-danger">

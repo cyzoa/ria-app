@@ -1,8 +1,8 @@
 export const DEFAULT_LOCALE = "ko" as const;
 
-export const SUPPORTED_LOCALES = [DEFAULT_LOCALE, "en", "ja"] as const;
+export const SUPPORTED_LOCALES = [DEFAULT_LOCALE, "en", "ja", "es", "fr", "de", "ru"] as const;
 
-export const PLANNED_LOCALES = ["es", "fr", "de", "ru"] as const;
+export const PLANNED_LOCALES = [] as const;
 
 export type SupportedLocale = (typeof SUPPORTED_LOCALES)[number];
 
@@ -16,6 +16,10 @@ export const LOCALE_METADATA: Record<
   ko: { nativeLabel: "한국어", intlLocale: "ko-KR" },
   en: { nativeLabel: "English", intlLocale: "en" },
   ja: { nativeLabel: "日本語", intlLocale: "ja-JP" },
+  es: { nativeLabel: "Español", intlLocale: "es" },
+  fr: { nativeLabel: "Français", intlLocale: "fr" },
+  de: { nativeLabel: "Deutsch", intlLocale: "de" },
+  ru: { nativeLabel: "Русский", intlLocale: "ru" },
 };
 
 export const INTL_LOCALES: Record<SupportedLocale, string> = Object.fromEntries(
