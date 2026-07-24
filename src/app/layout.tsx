@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import { INTL_LOCALES } from "@/locales";
+import { getRequestLocale } from "@/lib/locale";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -13,13 +15,15 @@ export const viewport: Viewport = {
   maximumScale: 1,
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getRequestLocale();
+
   return (
-    <html lang="ko">
+    <html lang={INTL_LOCALES[locale]}>
       <body className="min-h-dvh antialiased">{children}</body>
     </html>
   );
